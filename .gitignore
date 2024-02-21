@@ -396,3 +396,9 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Bots binaries
+tools/bots/*.exe
+
+#game_logs
+tools/game_logs/
