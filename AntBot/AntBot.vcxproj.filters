@@ -15,33 +15,33 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Timer.h">
+    <ClInclude Include="src\Timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Square.h">
+    <ClInclude Include="src\Square.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="State.h">
+    <ClInclude Include="src\State.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Location.h">
+    <ClInclude Include="src\Location.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Bug.h">
+    <ClInclude Include="src\Bug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Bot.h">
+    <ClInclude Include="src\Bot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="State.cc">
+    <ClCompile Include="src\State.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MyBot.cc">
+    <ClCompile Include="src\MyBot.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Bot.cc">
+    <ClCompile Include="src\Bot.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
