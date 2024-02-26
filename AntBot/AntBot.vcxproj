@@ -160,6 +160,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -178,6 +179,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -194,6 +196,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -206,6 +209,9 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Ant\Ant.h" />
+    <ClInclude Include="src\Blackboard\Job.h" />
+    <ClInclude Include="src\Blackboard\Blackboard.h" />
     <ClInclude Include="src\Bot.h" />
     <ClInclude Include="src\Bug.h" />
     <ClInclude Include="src\Location.h" />
@@ -215,6 +221,9 @@
     <ClInclude Include="src\Timer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Ant\Ant.cpp" />
+    <ClCompile Include="src\Blackboard\Job.cpp" />
+    <ClCompile Include="src\Blackboard\Blackboard.cpp" />
     <ClCompile Include="src\Bot.cc" />
     <ClCompile Include="src\MyBot.cc" />
     <ClCompile Include="src\State.cc" />
