@@ -4,11 +4,11 @@
 std::vector<Location> AStar::GetPathInGrid(std::vector<std::vector<AStarNode>> grid, AStarNode& r_start, AStarNode& r_target)
 {
     // Create lists for open and closed nodes
-    std::vector<AStarNode&> openList = std::vector<AStarNode&>();
-    std::vector<AStarNode&> closedList = std::vector<AStarNode&>();
+    std::vector<AStarNode*> openList = std::vector<AStarNode*>();
+    std::vector<AStarNode*> closedList = std::vector<AStarNode*>();
 
     // Add the start node to the open list
-    openList.push_back(r_start);
+    openList.push_back(&r_start);
 
     // Set the initial distance and score values for the start node
     r_start.distanceToStart = 0;
@@ -24,23 +24,23 @@ std::vector<Location> AStar::GetPathInGrid(std::vector<std::vector<AStarNode>> g
     {
         // Find the node with the lowest cost in the open list
         int index = 0;
-        int lowestCost = openList[0].nodeCost;
+        int lowestCost = openList[0]->nodeCost;
 
         for (size_t i = 1; i < openList.size(); i++)
         {
-            if (openList[i].nodeCost < lowestCost)
+            if (openList[i]->nodeCost < lowestCost)
             {
-                lowestCost = openList[i].nodeCost;
+                lowestCost = openList[i]->nodeCost;
                 index = i;
             }
         }
 
         // Get the current node and remove it from the open list
-        AStarNode& currentNode = openList[index];
+        AStarNode& currentNode = *openList[index];
         openList.erase(openList.begin() + index);
 
         // Add the current node to the closed list
-        closedList.push_back(currentNode);
+        closedList.push_back(&currentNode);
 
         // Check if the current node is the target node
         if (currentNode == r_target)
@@ -61,7 +61,7 @@ std::vector<Location> AStar::GetPathInGrid(std::vector<std::vector<AStarNode>> g
             bool isInClosedList = false;
             for (size_t i = 0; i < closedList.size(); i++)
             {
-                if (closedList[i] == grid[newY][newX])
+                if (*closedList[i] == grid[newY][newX])
                 {
                     isInClosedList = true;
                     break;
@@ -73,7 +73,7 @@ std::vector<Location> AStar::GetPathInGrid(std::vector<std::vector<AStarNode>> g
             {
                 if (!isInClosedList)
                 {
-                    openList.push_back(grid[newY][newX]);
+                    openList.push_back(&grid[newY][newX]);
                 }
 
                 grid[newY][newX].distanceToStart = currentNode.distanceToStart + 1;

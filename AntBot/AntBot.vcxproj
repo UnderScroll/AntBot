@@ -210,6 +210,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Ant\Ant.h" />
+    <ClInclude Include="src\a_star.h" />
+    <ClInclude Include="src\a_star_node.h" />
     <ClInclude Include="src\Blackboard\Job.h" />
     <ClInclude Include="src\Blackboard\Blackboard.h" />
     <ClInclude Include="src\Bot.h" />
@@ -222,6 +224,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Ant\Ant.cpp" />
+    <ClCompile Include="src\a_star.cpp" />
     <ClCompile Include="src\Blackboard\Job.cpp" />
     <ClCompile Include="src\Blackboard\Blackboard.cpp" />
     <ClCompile Include="src\Bot.cc" />
