@@ -1,6 +1,6 @@
 #pragma once
-#include <src/Square.h>
-#include <Location.h>
+#include "Square.h"
+#include "Location.h"
 
 struct AStarNode {
 	bool isWalkable;
