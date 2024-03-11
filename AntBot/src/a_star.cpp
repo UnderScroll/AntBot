@@ -1,4 +1,3 @@
-#include <cmath>
 #include "a_star.h"
 
 std::vector<Location> AStar::GetPathInGrid(std::vector<std::vector<AStarNode>> grid, AStarNode& r_start, AStarNode& r_target)
