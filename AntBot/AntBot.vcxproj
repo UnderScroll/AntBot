@@ -214,15 +214,14 @@
     <ClInclude Include="src\a_star_node.h" />
     <ClInclude Include="src\Blackboard\Job.h" />
     <ClInclude Include="src\Blackboard\Blackboard.h" />
-    <ClInclude Include="src\Blackboard\Strategy.h" />
     <ClInclude Include="src\Bot.h" />
     <ClInclude Include="src\Bug.h" />
     <ClInclude Include="src\Location.h" />
     <ClInclude Include="src\Logger\Logger.h" />
+    <ClInclude Include="src\MapRegion.h" />
     <ClInclude Include="src\Square.h" />
     <ClInclude Include="src\State.h" />
     <ClInclude Include="src\Timer.h" />
-    <ClInclude Include="strategy.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Ant\Ant.cpp" />

@@ -51,10 +51,7 @@
     <ClInclude Include="src\a_star_node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="strategy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Blackboard\Strategy.h">
+    <ClInclude Include="src\MapRegion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
