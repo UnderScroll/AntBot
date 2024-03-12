@@ -4,8 +4,8 @@
 
 #include "../State.h"
 #include "../Ant/Ant.h"
-#include "Job.h"
 #include "../MapRegion.h"
+#include "Job.h"
 
 //Note : The Blackboard singleton is not threadsafe
 class Blackboard

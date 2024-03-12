@@ -2,7 +2,7 @@
 
 #include <array>
 
-const char* rawRegion =
+static const char* rawRegion =
 "EEEEE@@@@@@@@@@@@@@@@@WWWWWWWWWW@@@BBBBBBBBBB@@@@@@@@@@@@@@@@@TTTTTTTTTT@@@DDDDDDDDDD@@@@@@@@@@@@@@@@@VVVVVVVVVV@@@EEEEE"
 "EEEEEE@@@@@@@KKKKK@@@@@@WWWWWWWWW@@@BBBBBBBBBB@@@@@@@HHHHH@@@@@@TTTTTTTTT@@@DDDDDDDDDD@@@@@@@JJJJJ@@@@@@VVVVVVVVV@@@EEEE"
 "EEEEEE@@@@@@KKKKKKKK@@@@@WWWWWWWW@@@BBBBBBBBBB@@@@@@HHHHHHHH@@@@@TTTTTTTT@@@DDDDDDDDDD@@@@@@JJJJJJJJ@@@@@VVVVVVVV@@@EEEE"
@@ -52,7 +52,7 @@ const char* rawRegion =
 "EEE@@@@@MMMMM@@@@@@@WWWWWWWWWWW@@@@BBBBBBBB@@@@@RRRRR@@@@@@@TTTTTTTTTTT@@@@DDDDDDDD@@@@@OOOOO@@@@@@@VVVVVVVVVVV@@@@EEEEE"
 "EEEE@@@@@@@@@@@@@@@@@WWWWWWWWWWW@@@BBBBBBBBB@@@@@@@@@@@@@@@@@TTTTTTTTTTT@@@DDDDDDDDD@@@@@@@@@@@@@@@@@VVVVVVVVVVV@@@EEEEE";
 
-std::array<std::array<char, 48>, 120> loadRegion() {
+static std::array<std::array<char, 48>, 120> loadRegion() {
 	std::array<std::array<char, 48>, 120> region = std::array<std::array<char, 48>, 120>();
 
 	for (size_t i = 0; i < region.size(); i++)
