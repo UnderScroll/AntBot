@@ -5,6 +5,7 @@
 #include "../State.h"
 #include "../Ant/Ant.h"
 #include "Job.h"
+#include "../MapRegion.h"
 
 //Note : The Blackboard singleton is not threadsafe
 class Blackboard
@@ -23,7 +24,7 @@ public:
 	static std::vector<Job>& getJobs() { return getInstance().jobs; }
 private:
 	/*Singleton*/
-	Blackboard(): p_gameState(nullptr) {}; //Removes constructor direct call
+	Blackboard() : p_gameState(nullptr) { regions = loadRegion(); }; //Removes constructor direct call
 
 	Blackboard(Blackboard& r_other) = delete; //Not clonable
 	void operator=(const Blackboard&) = delete; //Not assignable
@@ -36,9 +37,8 @@ private:
 	State* p_gameState;
 	void i_updateState(State& r_newState);
 
-	//TODO get graph from state, update graph
-	/**/
-
+	/*Region*/
+	std::array<std::array<char, 48>, 120> regions;
 
 	/*Jobs*/
 	std::vector<Job> jobs;
