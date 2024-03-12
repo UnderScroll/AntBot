@@ -1,4 +1,6 @@
 #include "Bot.h"
+#include "BlackBoard/BlackBoard.h"
+#include "BlackBoard/ActiveExplorationStrategy.h"
 
 using namespace std;
 
@@ -16,6 +18,8 @@ void Bot::playGame()
     state.setup();
     endTurn();
 
+    setupStrategies();
+
     //continues making moves while the game is not over
     while(cin >> state)
     {
@@ -24,6 +28,15 @@ void Bot::playGame()
         endTurn();
     }
 };
+
+void Bot::setupStrategies()
+{
+    for (size_t i = 0; i < Blackboard::getInstance().getState().noPlayers - 1; i++)
+    {
+       //ActiveExplorationStrategy explorationStrategy = ActiveExplorationStrategy(map<index jobs>, i);
+       //strategies.push_back(explorationStrategy);
+    }
+}
 
 //makes the bots moves for the turn
 void Bot::makeMoves()

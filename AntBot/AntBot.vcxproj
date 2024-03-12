@@ -212,6 +212,7 @@
     <ClInclude Include="src\Ant\Ant.h" />
     <ClInclude Include="src\a_star.h" />
     <ClInclude Include="src\a_star_node.h" />
+    <ClInclude Include="src\Blackboard\ActiveExplorationStrategy.h" />
     <ClInclude Include="src\Blackboard\Job.h" />
     <ClInclude Include="src\Blackboard\Blackboard.h" />
     <ClInclude Include="src\Blackboard\Strategy.h" />

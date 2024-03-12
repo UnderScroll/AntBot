@@ -1,6 +1,8 @@
 #ifndef BOT_H_
 #define BOT_H_
 
+#include "Blackboard/Strategy.h"
+#include <vector>
 #include "State.h"
 
 /*
@@ -10,10 +12,13 @@ struct Bot
 {
     State state;
 
+    std::vector<Strategy> strategies;
+
     Bot();
 
     void playGame();    //plays a single game of Ants
 
+    void setupStrategies();
     void makeMoves();   //makes moves for a single turn
     void endTurn();     //indicates to the engine that it has made its moves
 };
