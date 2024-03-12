@@ -45,6 +45,18 @@
     <ClInclude Include="src\Ant\Ant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\a_star.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\a_star_node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="strategy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Blackboard\Strategy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\State.cc">
@@ -63,6 +75,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Ant\Ant.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\a_star.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

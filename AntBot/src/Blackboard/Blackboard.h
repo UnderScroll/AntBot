@@ -34,7 +34,7 @@ private:
 
 	/*State*/
 	State* p_gameState;
-	void i_updateState(State& newState);
+	void i_updateState(State& r_newState);
 
 	//TODO get graph from state, update graph
 	/**/
@@ -57,5 +57,5 @@ private:
 	/**/
 };
 
-std::ostream& operator<<(std::ostream& os, const Blackboard& blackboard);
+std::ostream& operator<<(std::ostream& r_os, const Blackboard& blackboard);
 

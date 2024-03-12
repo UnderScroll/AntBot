@@ -5,8 +5,8 @@
 //Initialize singleton static instance
 Blackboard Blackboard::s_instance;
 
-void Blackboard::i_updateState(State& state) {
-	p_gameState = &state;
+void Blackboard::i_updateState(State& r_state) {
+	p_gameState = &r_state;
 }
 
 void Blackboard::i_addJob(Job job) 
@@ -31,12 +31,14 @@ bool Blackboard::i_removeJob(const Job& r_job)
 
 bool Blackboard::i_updateJobPriority(Job& r_job, int priority)
 {
-	if (!i_removeJob(r_job))
+	if (!i_removeJob(r_job)) [[unlikely]]
 		return false;
 
 	r_job.priority = priority;
 
 	i_addJob(r_job);
+
+	return true;
 }
 
 bool Blackboard::i_assignJobToAnt(Job& r_job, const Ant& ant)
@@ -49,16 +51,16 @@ bool Blackboard::i_unassignJobToAnt(Job& r_job, const Ant& ant)
 	return r_job.unassignAnt(ant);
 }
 
-std::ostream& operator<<(std::ostream& os, const Blackboard& blackboard) 
+std::ostream& operator<<(std::ostream& r_os, const Blackboard& blackboard) 
 {
-	os << "Blackboard : {\nstate: {\n";
+	r_os << "Blackboard : {\nstate: {\n";
 	if (&blackboard.getState() != nullptr)
-		os << blackboard.getState();
-	os << "},\njobs: {\n[\n";
+		r_os << blackboard.getState();
+	r_os << "},\njobs: {\n[\n";
 	for (Job& job : blackboard.getJobs()) 
 	{
-		os << '\t' << "(" << job.id << ") " << job.priority << '\n';
+		r_os << '\t' << "(" << job.id << ") " << job.priority << '\n';
 	}
-	os << "]\n}\n}" << std::endl;
-	return os;
+	r_os << "]\n}\n}" << std::endl;
+	return r_os;
 }
