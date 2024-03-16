@@ -1,14 +1,14 @@
 #pragma once
 #include "Strategy.h"
 
-class ActiveExplorationStrategy : Strategy 
+class ActiveExplorationStrategy : public Strategy 
 {
 private :
-	int targetPlayerAnthill;
+	int targetPlayerAnthill; 
+	bool isAntHillPositionKnow = false;
 public:
-	void ComputeStrategyPriority() override;
-	void SetTargetPlayerAnthill(int playerID);
-	ActiveExplorationStrategy(std::map<int, std::vector<Job>> steps, int targetPlayerAnthill) : Strategy(steps), targetPlayerAnthill{targetPlayerAnthill}
+	void ComputeStrategyPriority()override 
 	{
 	};
+	ActiveExplorationStrategy(std::map<int, std::vector<Job>> steps, int targetPlayerAnthill) : Strategy(steps), targetPlayerAnthill{ targetPlayerAnthill } {};
 };
