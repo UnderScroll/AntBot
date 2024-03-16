@@ -2,6 +2,10 @@
 
 #include <array>
 
+#include "Location.h"
+
+static const char MAX_REGION_INDEX = 23;
+
 static const char* rawRegion =
 "EEEEE@@@@@@@@@@@@@@@@@WWWWWWWWWW@@@BBBBBBBBBB@@@@@@@@@@@@@@@@@TTTTTTTTTT@@@DDDDDDDDDD@@@@@@@@@@@@@@@@@VVVVVVVVVV@@@EEEEE"
 "EEEEEE@@@@@@@KKKKK@@@@@@WWWWWWWWW@@@BBBBBBBBBB@@@@@@@HHHHH@@@@@@TTTTTTTTT@@@DDDDDDDDDD@@@@@@@JJJJJ@@@@@@VVVVVVVVV@@@EEEE"
@@ -52,7 +56,7 @@ static const char* rawRegion =
 "EEE@@@@@MMMMM@@@@@@@WWWWWWWWWWW@@@@BBBBBBBB@@@@@RRRRR@@@@@@@TTTTTTTTTTT@@@@DDDDDDDD@@@@@OOOOO@@@@@@@VVVVVVVVVVV@@@@EEEEE"
 "EEEE@@@@@@@@@@@@@@@@@WWWWWWWWWWW@@@BBBBBBBBB@@@@@@@@@@@@@@@@@TTTTTTTTTTT@@@DDDDDDDDD@@@@@@@@@@@@@@@@@VVVVVVVVVVV@@@EEEEE";
 
-static std::array<std::array<char, 48>, 120> loadRegion() {
+constexpr static std::array<std::array<char, 48>, 120> loadRegion() {
 	std::array<std::array<char, 48>, 120> region = std::array<std::array<char, 48>, 120>();
 
 	for (size_t i = 0; i < region.size(); i++)
@@ -64,4 +68,20 @@ static std::array<std::array<char, 48>, 120> loadRegion() {
 	}
 
 	return region;
+}
+
+constexpr static std::array<std::vector<Location>, MAX_REGION_INDEX> getRegions()
+{
+	std::array<std::vector<Location>, MAX_REGION_INDEX> regions = std::array<std::vector<Location>, MAX_REGION_INDEX>();
+	const std::array<std::array<char, 48>, 120>& regionValues = loadRegion();
+	
+	for (size_t i = 0; i < regionValues.size(); i++)
+	{
+		for (size_t j = 0; j < regionValues[0].size(); j++)
+		{
+			regions[regionValues[i][j]].push_back(Location(i, j));
+		}
+	}
+
+	return regions;
 }
