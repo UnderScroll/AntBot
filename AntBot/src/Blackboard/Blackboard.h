@@ -16,9 +16,7 @@ public:
 	static void addJob(Job job) { getInstance().i_addJob(job); }
 	static void removeJob(const Job& r_job) { getInstance().i_removeJob(r_job); }
 	static void updateJobPriority(Job& r_job, int priority) { getInstance().i_updateJobPriority(r_job, priority); }
-
-	//static bool assignJobToAnt(Job& r_job, const Ant& ant) { return getInstance().i_assignJobToAnt(r_job, ant); };
-	//static bool unassignJobToAnt(Job& r_job, const Ant& ant) { return getInstance().i_unassignJobToAnt(r_job, ant); };
+	static void assignJobsToAnts(std::vector<Ant*> ants) { getInstance().i_assignJobsToAnts(ants); }
 
 	static State& getState() { return *getInstance().p_gameState; }
 	static std::vector<Job>& getJobs() { return getInstance().jobs; }
@@ -38,7 +36,7 @@ private:
 	void i_updateState(State& r_newState);
 
 	/*Region*/
-	std::array<std::vector<Location>, MAX_REGION_INDEX> regions;
+	std::array<std::vector<Location>, MAX_REGION_INDEX + 1> regions;
 
 	/*Jobs*/
 	std::vector<Job> jobs;
@@ -52,10 +50,9 @@ private:
 	//Updated the job r_job with the new priority, conserves priority order
 	bool i_updateJobPriority(Job& r_job, int priority);
 
-	//bool i_assignJobToAnt(Job& r_job, const Ant& ant);
-	//bool i_unassignJobToAnt(Job& r_job, const Ant& ant);
+	void i_assignJobsToAnts(std::vector<Ant*> ants);
 	/**/
 };
 
-std::ostream& operator<<(std::ostream& r_os, const Blackboard& blackboard);
+std::ostream& operator<<(std::ostream& r_os, const Blackboard& r_blackboard);
 
