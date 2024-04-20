@@ -5,6 +5,7 @@
 #include "../State.h"
 #include "../Ant/Ant.h"
 #include "../MapRegion.h"
+#include "../a_star_node.h"
 #include "Job.h"
 
 //Note : The Blackboard singleton is not threadsafe
@@ -22,7 +23,7 @@ public:
 	static std::vector<Job>& getJobs() { return getInstance().jobs; }
 private:
 	/*Singleton*/
-	Blackboard() : p_gameState(nullptr) { regions = getRegions(); }; //Removes constructor direct call
+	Blackboard(); //Removes constructor direct call
 
 	Blackboard(Blackboard& r_other) = delete; //Not clonable
 	void operator=(const Blackboard&) = delete; //Not assignable
@@ -51,6 +52,12 @@ private:
 	bool i_updateJobPriority(Job& r_job, int priority);
 
 	void i_assignJobsToAnts(std::vector<Ant*> ants);
+	/**/
+
+	/*Ants*/
+	std::vector<std::vector<AStarNode>> mapNodes;
+
+	void i_moveAllAnts();
 	/**/
 };
 
