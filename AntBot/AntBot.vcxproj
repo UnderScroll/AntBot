@@ -215,6 +215,7 @@
     <ClInclude Include="src\Blackboard\ActiveExplorationStrategy.h" />
     <ClInclude Include="src\Blackboard\AttackRegionStrategy.h" />
     <ClInclude Include="src\Blackboard\AttackZoneJob.h" />
+    <ClInclude Include="src\Blackboard\DiscoverAnthillPositionJob.h" />
     <ClInclude Include="src\Blackboard\ExploreZoneJob.h" />
     <ClInclude Include="src\Blackboard\Job.h" />
     <ClInclude Include="src\Blackboard\Blackboard.h" />

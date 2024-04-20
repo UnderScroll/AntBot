@@ -75,6 +75,9 @@
     <ClInclude Include="src\Blackboard\AttackZoneJob.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Blackboard\DiscoverAnthillPositionJob.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\State.cc">

@@ -10,6 +10,7 @@
 #include "BlackBoard/ActiveExplorationStrategy.h"
 #include "Blackboard/ExploreZoneJob.h"
 #include "Blackboard/AttackZoneJob.h"
+#include "Blackboard/DiscoverAnthillPositionJob.h"
 
 using namespace std;
 
@@ -90,7 +91,7 @@ void Bot::addOccupyRegionStrategy(const size_t& regionIndex)
 
 void Bot::addExploreAnthillStrategy(const size_t& antHillIndex)
 {
-	std::vector<Job> explorationStepJobs = vector<Job>();
+	std::vector<Job> explorationStepJobs{ DiscoverAnthillPositionJob(0, 3, antHillIndex) };
 
 	//TODO : Add the exploration job
 	std::map<int, std::vector<Job>> explorationJobsMap = std::map<int, std::vector<Job>>();
