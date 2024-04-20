@@ -41,14 +41,32 @@ bool Blackboard::i_updateJobPriority(Job& r_job, int priority)
 	return true;
 }
 
-bool Blackboard::i_assignJobToAnt(Job& r_job, const Ant& ant)
-{
-	return r_job.assignAnt(ant);
-}
+void Blackboard::i_assignJobsToAnts(std::vector<Ant*> ants)
+{	
+	for (Job& job : jobs)
+	{
+		//Job candidates
+		std::vector<std::pair<size_t, unsigned int>> candidates(ants.size());
+		for (size_t antIndex = 0, candidateIndex = 0; antIndex < ants.size(); antIndex++, candidateIndex++)
+		{
+			const unsigned int candidateFitness = ants[antIndex]->computeFitness(job);
+			candidates[candidateIndex] = std::make_pair(antIndex, candidateFitness);
+		}
+		
+		//Sort candidates by fitness
+		const auto isBetterFit = [](const std::pair<size_t, unsigned int>& current, const std::pair<size_t, unsigned int>& other) { return current.second > other.second; };
+		std::sort(candidates.begin(), candidates.end(), isBetterFit);
 
-bool Blackboard::i_unassignJobToAnt(Job& r_job, const Ant& ant)
-{
-	return r_job.unassignAnt(ant);
+		//Assign top candidates to job
+		for (unsigned int i = 0; i < job.maxAssignedAnts; i++)
+		{
+			const size_t candidateIndex = candidates[i].first - i; //Offsets index by removed amount
+			job.assignedAnts.push_back(ants[candidateIndex]);
+			ants.erase(ants.begin() + candidateIndex);
+			if (ants.size() == 0)
+				return;
+		}
+	}
 }
 
 std::ostream& operator<<(std::ostream& r_os, const Blackboard& blackboard) 
@@ -59,7 +77,7 @@ std::ostream& operator<<(std::ostream& r_os, const Blackboard& blackboard)
 	r_os << "},\njobs: {\n[\n";
 	for (Job& job : blackboard.getJobs()) 
 	{
-		r_os << '\t' << "(" << job.id << ") " << job.priority << '\n';
+		r_os << '\t' << job << '\n';
 	}
 	r_os << "]\n}\n}" << std::endl;
 	return r_os;

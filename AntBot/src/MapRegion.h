@@ -59,26 +59,30 @@ static const char* rawRegion =
 constexpr static std::array<std::array<char, 48>, 120> loadRegion() {
 	std::array<std::array<char, 48>, 120> region = std::array<std::array<char, 48>, 120>();
 
-	for (size_t i = 0; i < region.size(); i++)
+	for (size_t i = 0; i < 48; i++)
 	{
-		for (size_t j = 0; j < region[0].size(); j++)
+		for (size_t j = 0; j < 120; j++)
 		{
-			region[i][j] = rawRegion[i * 120 + j] - 'A';
+			region[j][i] = rawRegion[i * 48 + j] - 'A';
 		}
 	}
 
 	return region;
 }
 
-constexpr static std::array<std::vector<Location>, MAX_REGION_INDEX> getRegions()
+constexpr static std::array<std::vector<Location>, MAX_REGION_INDEX + 1> getRegions()
 {
-	std::array<std::vector<Location>, MAX_REGION_INDEX> regions = std::array<std::vector<Location>, MAX_REGION_INDEX>();
+	std::array<std::vector<Location>, MAX_REGION_INDEX + 1> regions = std::array<std::vector<Location>, MAX_REGION_INDEX + 1>();
+	
 	const std::array<std::array<char, 48>, 120>& regionValues = loadRegion();
 	
 	for (size_t i = 0; i < regionValues.size(); i++)
 	{
 		for (size_t j = 0; j < regionValues[0].size(); j++)
 		{
+			if (regionValues[i][j] == -1)
+				continue;
+
 			regions[regionValues[i][j]].push_back(Location(i, j));
 		}
 	}
