@@ -22,6 +22,7 @@ public:
 
 	static State& getState() { return *getInstance().p_gameState; }
 	static std::vector<Job>& getJobs() { return getInstance().jobs; }
+	static std::array<std::vector<Location>, MAX_REGION_INDEX>& getAllRegions() { return getInstance().regions; }
 private:
 	/*Singleton*/
 	Blackboard() : p_gameState(nullptr) { regions = getRegions(); }; //Removes constructor direct call
@@ -52,9 +53,8 @@ private:
 	//Updated the job r_job with the new priority, conserves priority order
 	bool i_updateJobPriority(Job& r_job, int priority);
 
-	//bool i_assignJobToAnt(Job& r_job, const Ant& ant);
-	//bool i_unassignJobToAnt(Job& r_job, const Ant& ant);
-	/**/
+	bool i_assignJobToAnt(Job& r_job, const Ant& ant);
+	bool i_unassignJobToAnt(Job& r_job, const Ant& ant);
 };
 
 std::ostream& operator<<(std::ostream& r_os, const Blackboard& blackboard);

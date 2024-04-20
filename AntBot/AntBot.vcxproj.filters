@@ -60,6 +60,15 @@
     <ClInclude Include="src\Blackboard\ActiveExplorationStrategy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Blackboard\TakeEnemyAnthillStrategy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Blackboard\AttackRegionStrategy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Blackboard\OccupyRegionStrategy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\State.cc">

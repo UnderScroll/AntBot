@@ -213,9 +213,12 @@
     <ClInclude Include="src\a_star.h" />
     <ClInclude Include="src\a_star_node.h" />
     <ClInclude Include="src\Blackboard\ActiveExplorationStrategy.h" />
+    <ClInclude Include="src\Blackboard\AttackRegionStrategy.h" />
     <ClInclude Include="src\Blackboard\Job.h" />
     <ClInclude Include="src\Blackboard\Blackboard.h" />
+    <ClInclude Include="src\Blackboard\OccupyRegionStrategy.h" />
     <ClInclude Include="src\Blackboard\Strategy.h" />
+    <ClInclude Include="src\Blackboard\TakeEnemyAnthillStrategy.h" />
     <ClInclude Include="src\Bot.h" />
     <ClInclude Include="src\Bug.h" />
     <ClInclude Include="src\Location.h" />
