@@ -213,6 +213,7 @@
     <ClInclude Include="src\a_star.h" />
     <ClInclude Include="src\a_star_node.h" />
     <ClInclude Include="src\Blackboard\ActiveExplorationStrategy.h" />
+    <ClInclude Include="src\Blackboard\AttackEnemyAnthillJob.h" />
     <ClInclude Include="src\Blackboard\AttackRegionStrategy.h" />
     <ClInclude Include="src\Blackboard\AttackZoneJob.h" />
     <ClInclude Include="src\Blackboard\DiscoverAnthillPositionJob.h" />

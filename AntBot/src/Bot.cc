@@ -11,6 +11,7 @@
 #include "Blackboard/ExploreZoneJob.h"
 #include "Blackboard/AttackZoneJob.h"
 #include "Blackboard/DiscoverAnthillPositionJob.h"
+#include "Blackboard/AttackEnemyAnthillJob.h"
 
 using namespace std;
 
@@ -69,7 +70,6 @@ void Bot::addAttackRegionStrategy(const size_t& regionIndex)
 {
 	std::vector<Job> stepJobs{ AttackZoneJob(0, 3, regionIndex) };
 
-	//TODO : Add the jobs
 	std::map<int, std::vector<Job>> jobsMap = std::map<int, std::vector<Job>>();
 	jobsMap.insert(std::make_pair(0, stepJobs));
 
@@ -81,7 +81,6 @@ void Bot::addOccupyRegionStrategy(const size_t& regionIndex)
 {
 	std::vector<Job> stepJobs{ ExploreZoneJob(0, 3, regionIndex) };
 
-	//TODO : Add the job
 	std::map<int, std::vector<Job>> jobsMap = std::map<int, std::vector<Job>>();
 	jobsMap.insert(std::make_pair(0, stepJobs));
 
@@ -93,7 +92,6 @@ void Bot::addExploreAnthillStrategy(const size_t& antHillIndex)
 {
 	std::vector<Job> explorationStepJobs{ DiscoverAnthillPositionJob(0, 3, antHillIndex) };
 
-	//TODO : Add the exploration job
 	std::map<int, std::vector<Job>> explorationJobsMap = std::map<int, std::vector<Job>>();
 	explorationJobsMap.insert(std::make_pair(0, explorationStepJobs));
 
@@ -103,9 +101,8 @@ void Bot::addExploreAnthillStrategy(const size_t& antHillIndex)
 
 void Bot::addAttackAnthillStrategy(const size_t& antHillIndex)
 {
-	std::vector<Job> stepJobs = vector<Job>();
+	std::vector<Job> stepJobs{ AttackEnemyAnthillJob(0, 3, antHillIndex) };
 
-	//TODO : Add the attack job
 	std::map<int, std::vector<Job>> attackJobsMap = std::map<int, std::vector<Job>>();
 	attackJobsMap.insert(std::make_pair(0, stepJobs));
 
