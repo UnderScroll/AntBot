@@ -2,8 +2,8 @@
 
 unsigned int Job::s_idIndex = 0;
 
-Job::Job(const int priority, const int maxAssignedAnts)
-	:priority(priority), maxAssignedAnts(maxAssignedAnts)
+Job::Job(const int priority, const int maxAssignedAnts, const int targetIndex)
+	:priority(priority), maxAssignedAnts(maxAssignedAnts), targetIndex(targetIndex)
 {
 	this->id = Job::s_idIndex++;
 	this->assignedAnts = std::vector<Ant*>();

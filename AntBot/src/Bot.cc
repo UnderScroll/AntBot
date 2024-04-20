@@ -8,6 +8,8 @@
 #include "BlackBoard/AttackRegionStrategy.h"
 #include "BlackBoard/OccupyRegionStrategy.h"
 #include "BlackBoard/ActiveExplorationStrategy.h"
+#include "Blackboard/ExploreZoneJob.h"
+#include "Blackboard/AttackZoneJob.h"
 
 using namespace std;
 
@@ -44,7 +46,6 @@ void Bot::setupStrategies()
 	for (size_t antHillIndex = 0; antHillIndex < Blackboard::getInstance().getState().noPlayers - 1; antHillIndex++)
 	{
 		addExploreAnthillStrategy(antHillIndex);
-
 		addAttackAnthillStrategy(antHillIndex);
 	}
 
@@ -63,27 +64,27 @@ void Bot::setupStrategies()
 	}
 }
 
-void Bot::addAttackRegionStrategy(const size_t& antHillIndex)
+void Bot::addAttackRegionStrategy(const size_t& regionIndex)
 {
-	std::vector<Job> stepJobs = vector<Job>();
+	std::vector<Job> stepJobs{ AttackZoneJob(0, 3, regionIndex) };
 
 	//TODO : Add the jobs
 	std::map<int, std::vector<Job>> jobsMap = std::map<int, std::vector<Job>>();
 	jobsMap.insert(std::make_pair(0, stepJobs));
 
-	AttackRegionStrategy strategy = AttackRegionStrategy(jobsMap, antHillIndex);
+	AttackRegionStrategy strategy = AttackRegionStrategy(jobsMap, regionIndex);
 	strategies.push_back(strategy);
 }
 
-void Bot::addOccupyRegionStrategy(const size_t& antHillIndex)
+void Bot::addOccupyRegionStrategy(const size_t& regionIndex)
 {
-	std::vector<Job> stepJobs = vector<Job>();
+	std::vector<Job> stepJobs{ ExploreZoneJob(0, 3, regionIndex) };
 
 	//TODO : Add the job
 	std::map<int, std::vector<Job>> jobsMap = std::map<int, std::vector<Job>>();
 	jobsMap.insert(std::make_pair(0, stepJobs));
 
-	OccupyRegionStrategy strategy = OccupyRegionStrategy(jobsMap, antHillIndex);
+	OccupyRegionStrategy strategy = OccupyRegionStrategy(jobsMap, regionIndex);
 	strategies.push_back(strategy);
 }
 
