@@ -15,6 +15,7 @@
 #include "Bug.h"
 #include "Square.h"
 #include "Location.h"
+#include "Ant/Ant.h"
 
 /*
     constants
@@ -42,6 +43,7 @@ struct State
 
     std::vector<std::vector<Square> > grid;
     std::vector<Location> myAnts, enemyAnts, myHills, enemyHills, food;
+    std::vector<Ant> ants, enemies;
 
     Timer timer;
     Bug bug;
@@ -61,6 +63,7 @@ struct State
     Location getLocation(const Location &startLoc, int direction);
 
     void updateVisionInformation();
+    void updateAntsVector();
 };
 
 std::ostream& operator<<(std::ostream &os, const State &state);
