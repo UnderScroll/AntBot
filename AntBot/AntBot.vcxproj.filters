@@ -57,6 +57,30 @@
     <ClInclude Include="src\Blackboard\Strategy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Blackboard\ActiveExplorationStrategy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Blackboard\TakeEnemyAnthillStrategy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Blackboard\AttackRegionStrategy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Blackboard\OccupyRegionStrategy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Blackboard\ExploreZoneJob.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Blackboard\AttackZoneJob.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Blackboard\DiscoverAnthillPositionJob.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Blackboard\AttackEnemyAnthillJob.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\State.cc">

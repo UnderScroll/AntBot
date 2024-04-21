@@ -5,10 +5,24 @@
 
 class Strategy
 {
-private:
+protected:
 	int currentJobIndex;
+	int priority;
 	std::map<int, std::vector<Job>> steps;
 
 public :
-	virtual void ComputeStrategyPriority();
+	int GetPriority() { return priority; }
+
+	virtual void ComputeStrategyPriority() {};
+
+	Strategy(std::map<int, std::vector<Job>> steps) : steps{steps}
+	{
+		currentJobIndex = 0;
+		priority = 0;
+	}
+
+	~Strategy()
+	{
+		//TODO
+	}
 };

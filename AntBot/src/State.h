@@ -42,7 +42,7 @@ struct State
     int64_t seed;
 
     std::vector<std::vector<Square> > grid;
-    std::vector<Location> myAnts, enemyAnts, myHills, enemyHills, food;
+    std::vector<Location> myAnts, enemyAnts, myHills, enemyHills, food, takenEnemyHills;
     std::vector<Ant> ants, enemies;
 
     Timer timer;

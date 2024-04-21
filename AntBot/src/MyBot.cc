@@ -17,6 +17,8 @@ using namespace std;
 */
 int main(int argc, char *argv[])
 {
+    /*
+        This was used to debug the job and is therefore not needed anymore  
 
     Job job1{};
     job1.priority = 1;
@@ -91,7 +93,7 @@ int main(int argc, char *argv[])
     }
 
     std::cout << "====================================" << std::endl;
-
+    */
     /*
     cout.sync_with_stdio(0); //this line makes your bot faster
 

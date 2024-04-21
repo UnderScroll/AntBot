@@ -14,8 +14,8 @@ Ant::Ant()
 
 unsigned int Ant::computeFitness(const Job& job) const
 {
-	const int distSqr = (position.col - job.task.col) * (position.col - job.task.col) +
-		(position.row - job.task.row) * (position.row - job.task.row);
+	const int distSqr = (position.col - job.taskVariable.col) * (position.col - job.taskVariable.col) +
+		(position.row - job.taskVariable.row) * (position.row - job.taskVariable.row);
 
 	return INT_MAX - distSqr;
 }

@@ -21,6 +21,7 @@ public:
 
 	static State& getState() { return *getInstance().p_gameState; }
 	static std::vector<Job>& getJobs() { return getInstance().jobs; }
+	static std::array<std::vector<Location>, MAX_REGION_INDEX + 1>& getAllRegions() { return getInstance().regions; }
 private:
 	/*Singleton*/
 	Blackboard(); //Removes constructor direct call
