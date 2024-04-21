@@ -93,6 +93,12 @@ void Blackboard::i_assignJobsToAnts(std::vector<Ant*> ants)
 }
 
 void Blackboard::i_moveAllAnts() {
+	//Assign Jobs to all ants
+	std::vector<Ant*> ants = std::vector<Ant*>(p_gameState->ants.size());
+	std::ranges::transform(p_gameState->ants.begin(), p_gameState->ants.end(), ants.begin(), [](Ant& ant) { return &ant;});
+	i_assignJobsToAnts(ants);
+
+	//Get next position of each assigned ants
 	Ant::resetNextMaps(mapNodes);
 	std::vector<std::vector<AStarNode>> nextNodeMap = Ant::get_nextNodeMap();
 
