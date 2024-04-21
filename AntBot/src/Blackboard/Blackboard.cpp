@@ -43,7 +43,7 @@ void Blackboard::i_addJob(Job job)
 bool Blackboard::i_removeJob(const Job& r_job)
 {
 	auto isJob = [r_job](Job& other) { return other.id == r_job.id; };
-	auto itJob = std::find_if(jobs.begin(), jobs.end(), isJob);
+	auto itJob = std::ranges::find_if(jobs, isJob);
 
 	if (itJob == jobs.end()) [[unlikely]]
 		return false;
@@ -105,7 +105,7 @@ void Blackboard::i_moveAllAnts() {
 			if (path.size() == 0)
 			{
 				AStarNode& start = nextNodeMap[ant->position.col][ant->position.row];
-				AStarNode& target = nextNodeMap[job.task.col][job.task.row];
+				AStarNode& target = nextNodeMap[job.task().col][job.task().row];
 				std::vector<Location> newPath = AStar::GetPathInGrid(nextNodeMap, start, target);
 				path = newPath;
 			}
@@ -127,7 +127,7 @@ void Blackboard::i_moveAllAnts() {
 			if (!ant->setNextLocation(path[0]))
 			{
 				AStarNode& start = nextNodeMap[ant->position.col][ant->position.row];
-				AStarNode& target = nextNodeMap[job.task.col][job.task.row];
+				AStarNode& target = nextNodeMap[job.task().col][job.task().row];
 				std::vector<Location> newPath = AStar::GetPathInGrid(nextNodeMap, start, target);
 				path = newPath;
 			}

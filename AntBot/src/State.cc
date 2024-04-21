@@ -272,17 +272,16 @@ istream& operator>>(istream &is, State &state)
 
 void State::updateAntsVector()
 {
-    auto isSameAnt = [](Ant& ant, Location& nextLocation) { return ant.nextPosition.row == nextLocation.col && ant.nextPosition.row == nextLocation.col;};
-
     std::vector<Ant> updatedAnts = std::vector<Ant>(ants.capacity());
 
-    for (Location& next_location : myAnts)
+    for (Location& nextLocation : myAnts)
     {
-        auto antIt = std::find_if(ants.begin(), ants.end(), isSameAnt);
+        auto isSameAnt = [nextLocation](Ant& ant) { return ant.nextPosition.row == nextLocation.row && ant.nextPosition.col == nextLocation.col;};
+        auto antIt = std::ranges::find_if(ants.begin(), ants.end(), isSameAnt);
         if (antIt == ants.end())
         {
             Ant newAnt = Ant();
-            newAnt.position = next_location;
+            newAnt.position = nextLocation;
             ants.push_back(newAnt);
         }
         else 

@@ -38,7 +38,7 @@ bool Ant::setNextLocation(Location newLocation)
 void Ant::resetNextMaps(std::vector<std::vector<AStarNode>> nodeMap)
 {
 	Ant::s_nextNodeMap = nodeMap;
-	Ant::s_nextPositionMap = std::array<std::array<Ant*, 48>, 120>(nullptr);
+	Ant::s_nextPositionMap = std::array<std::array<Ant*, 48>, 120>();
 }
 
 std::vector<Location>& Ant::getPath() {
