@@ -153,9 +153,9 @@ void Blackboard::i_moveAllAnts() {
 			int deltax = ant->position.col - ant->nextPosition.col;
 			int deltay = ant->position.row - ant->nextPosition.row;
 			if (deltax != 0)
-				p_gameState->makeMove(ant->position, deltax > 0 ? 'W' : 'E');
+				p_gameState->makeMove(ant->position, (deltax > 0) * 2 + 1);
 			else if (deltay != 0)
-				p_gameState->makeMove(ant->position, deltax > 0 ? 'N' : 'S');
+				p_gameState->makeMove(ant->position, !(deltax > 0) * 2);
 		}
 }
 
