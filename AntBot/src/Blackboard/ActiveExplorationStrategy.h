@@ -5,11 +5,20 @@ class ActiveExplorationStrategy : public Strategy
 {
 private :
 	int targetPlayerAnthill; 
-	bool isAntHillPositionKnow = false;
+	float turnInterestMultiplier = .1f;
 public:
 	void ComputeStrategyPriority()override 
 	{
-		//TODO : if we are late into the game, and that there are many anthills that we don't know
+		//If we know the anthill position, this is void of interest
+		if (Blackboard::getState().enemyHills.size() >= targetPlayerAnthill - 1)
+		{
+			priority = -1;
+		}
+		//If we don't, it gets more interesting as the game progresses
+		else 
+		{
+			priority = ceil(Blackboard::getState().turn * turnInterestMultiplier);
+		}
 	};
 	ActiveExplorationStrategy(std::map<int, std::vector<Job>> steps, int targetPlayerAnthill) : Strategy(steps), targetPlayerAnthill{ targetPlayerAnthill } {};
 };
