@@ -4,6 +4,8 @@
 #include "Blackboard.h"
 #include "Job.h"
 
+#include "../Logger/Logger.h"
+
 class Strategy
 {
 protected:
@@ -16,6 +18,7 @@ public :
 
 	virtual void computeStrategyPriority()
 	{
+		LOG(Logger::Trace, "Test")
 		for (size_t i = 0; i < steps[currentJobIndex].size(); i++)
 		{
 			steps[currentJobIndex][i].priority = priority;

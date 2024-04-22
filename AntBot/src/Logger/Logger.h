@@ -1,19 +1,45 @@
 #pragma once
 
 #include <Windows.h>
+#include <fstream>
 
-#ifndef _DEBUG
-#define NO_WARN_LOG
-#define NO_INFO_LOG
-#define NO_DEBUG_LOG
-#define NO_TRACE_LOG
-#endif
+#define LOGGER_VERBOSE
 
 #ifndef LOG_STREAM
-#define LOG_STREAM std::cout
+#define LOG_STREAM Logger::getInstance().outFileStream
 #endif
 
-namespace Logger {
+class Logger {
+private:
+	static Logger& instance() {
+		static Logger instance;
+
+		return instance;
+	}
+
+	Logger()
+	{
+		outFileStream = std::ofstream();
+		outFileStream.open("./Debug.log");
+		hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	}
+
+	~Logger()
+	{
+		outFileStream.close();
+	}
+
+public:
+	std::ofstream outFileStream;
+	HANDLE hConsole;
+
+	static Logger& getInstance()
+	{
+		static std::once_flag flag;
+		std::call_once(flag, [] { instance(); });
+		return instance();
+	}
+
 	enum LogLevel {
 		Fatal,
 		Error,
@@ -22,8 +48,7 @@ namespace Logger {
 		Debug,
 		Trace
 	};
-
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+};
 
 #ifdef LOGGER_VERBOSE
 
@@ -31,27 +56,27 @@ namespace Logger {
 	#define FATAL_LOG(msg)
 #else
 	#define FATAL_LOG(msg) LOG_STREAM << __TIME__ << "(" << __func__ << ":" << __LINE__ << ") - ["; \
-			SetConsoleTextAttribute(Logger::hConsole, 13); \
+			SetConsoleTextAttribute(Logger::getInstance().hConsole, 13); \
 			LOG_STREAM << "FATAL"; \
-			SetConsoleTextAttribute(Logger::hConsole, 15); \
+			SetConsoleTextAttribute(Logger::getInstance().hConsole, 15); \
 			LOG_STREAM <<  "] " << msg << std::endl;
 #endif //NO_FATAL_LOG
 #ifdef NO_ERROR_LOG
 	#define ERROR_LOG(msg)
 #else
 	#define ERROR_LOG(msg) LOG_STREAM << __TIME__ << "(" << __func__ << ":" << __LINE__ << ") - ["; \
-			SetConsoleTextAttribute(Logger::hConsole, 12); \
+			SetConsoleTextAttribute(Logger::getInstance().hConsole, 12); \
 			LOG_STREAM << "ERROR"; \
-			SetConsoleTextAttribute(Logger::hConsole, 15); \
+			SetConsoleTextAttribute(Logger::getInstance().hConsole, 15); \
 			LOG_STREAM <<  "] " << msg << std::endl;
 #endif //NO_ERROR_LOG
 #ifdef NO_WARN_LOG
 	#define WARN_LOG(msg)
 #else
 	#define WARN_LOG(msg) LOG_STREAM << __TIME__ << "(" << __func__ << ":" << __LINE__ << ") - ["; \
-			SetConsoleTextAttribute(Logger::hConsole, 14); \
+			SetConsoleTextAttribute(Logger::getInstance().hConsole, 14); \
 			LOG_STREAM << "WARN"; \
-			SetConsoleTextAttribute(Logger::hConsole, 15); \
+			SetConsoleTextAttribute(Logger::getInstance().hConsole, 15); \
 			LOG_STREAM <<  "]  " << msg << std::endl;
 #endif //NO_WARN_LOG
 #ifdef NO_INFO_LOG
@@ -63,18 +88,18 @@ namespace Logger {
 	#define DEBUG_LOG(msg)
 #else
 	#define DEBUG_LOG(msg) LOG_STREAM << __TIME__ << "(" << __func__ << ":" << __LINE__ << ") - ["; \
-			SetConsoleTextAttribute(Logger::hConsole, 11); \
+			SetConsoleTextAttribute(Logger::getInstance().hConsole, 11); \
 			LOG_STREAM << "DEBUG"; \
-			SetConsoleTextAttribute(Logger::hConsole, 15); \
+			SetConsoleTextAttribute(Logger::getInstance().hConsole, 15); \
 			LOG_STREAM <<  "] " << msg << std::endl;
 #endif //NO_DEBUG_LOG
 #ifdef NO_TRACE_LOG
 	#define TRACE_LOG(msg)
 #else
 	#define TRACE_LOG(msg) LOG_STREAM << __TIME__ << "(" << __func__ << ":" << __LINE__ << ") - ["; \
-			SetConsoleTextAttribute(Logger::hConsole, 7); \
+			SetConsoleTextAttribute(Logger::getInstance().hConsole, 7); \
 			LOG_STREAM << "TRACE"; \
-			SetConsoleTextAttribute(Logger::hConsole, 15); \
+			SetConsoleTextAttribute(Logger::getInstance().hConsole, 15); \
 			LOG_STREAM <<  "] " << msg << std::endl;
 #endif //NO_TRACE_LOG
 
@@ -84,27 +109,27 @@ namespace Logger {
 #define FATAL_LOG(msg)
 #else
 	#define FATAL_LOG(msg) LOG_STREAM << "["; \
-			SetConsoleTextAttribute(Logger::hConsole, 13); \
+			SetConsoleTextAttribute(Logger::getInstance().hConsole, 13); \
 			LOG_STREAM << "F"; \
-			SetConsoleTextAttribute(Logger::hConsole, 15); \
+			SetConsoleTextAttribute(Logger::getInstance().hConsole, 15); \
 			LOG_STREAM << "] " << msg << std::endl;
 #endif //NO_FATAL_LOG
 #ifdef NO_ERROR_LOG
 	#define ERROR_LOG(msg)
 #else
 	#define ERROR_LOG(msg) LOG_STREAM << "["; \
-			SetConsoleTextAttribute(Logger::hConsole, 12); \
+			SetConsoleTextAttribute(Logger::getInstance().hConsole, 12); \
 			LOG_STREAM << "E"; \
-			SetConsoleTextAttribute(Logger::hConsole, 15); \
+			SetConsoleTextAttribute(Logger::getInstance().hConsole, 15); \
 			LOG_STREAM << "] " << msg << std::endl;
 #endif //NO_ERROR_LOG
 #ifdef NO_WARN_LOG
 	#define WARN_LOG(msg)
 #else
 	#define WARN_LOG(msg) LOG_STREAM << "["; \
-			SetConsoleTextAttribute(Logger::hConsole, 14); \
+			SetConsoleTextAttribute(Logger::getInstance().hConsole, 14); \
 			LOG_STREAM << "W"; \
-			SetConsoleTextAttribute(Logger::hConsole, 15); \
+			SetConsoleTextAttribute(Logger::getInstance().hConsole, 15); \
 			LOG_STREAM << "] " << msg << std::endl;
 #endif //NO_WARN_LOG
 #ifdef NO_INFO_LOG
@@ -116,18 +141,18 @@ namespace Logger {
 	#define DEBUG_LOG(msg)
 #else
 	#define DEBUG_LOG(msg) LOG_STREAM << "["; \
-			SetConsoleTextAttribute(Logger::hConsole, 11); \
+			SetConsoleTextAttribute(Logger::getInstance().hConsole, 11); \
 			LOG_STREAM << "D"; \
-			SetConsoleTextAttribute(Logger::hConsole, 15); \
+			SetConsoleTextAttribute(Logger::getInstance().hConsole, 15); \
 			LOG_STREAM << "] " << msg << std::endl;
 #endif //NO_DEBUG_LOG
 #ifdef NO_TRACE_LOG
 	#define TRACE_LOG(msg)
 #else
 	#define TRACE_LOG(msg) LOG_STREAM << "["; \
-			SetConsoleTextAttribute(Logger::hConsole, 7); \
+			SetConsoleTextAttribute(Logger::getInstance().hConsole, 7); \
 			LOG_STREAM << "T"; \
-			SetConsoleTextAttribute(Logger::hConsole, 15); \
+			SetConsoleTextAttribute(Logger::getInstance().hConsole, 15); \
 			LOG_STREAM << "] " << msg << std::endl;
 #endif //NO_TRACE_LOG
 
@@ -154,4 +179,3 @@ namespace Logger {
 			TRACE_LOG(msg) \
 			break; \
 	}
-}

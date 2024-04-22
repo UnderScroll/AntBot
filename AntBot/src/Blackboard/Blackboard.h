@@ -14,6 +14,7 @@ class Blackboard
 public:
 	static Blackboard& getInstance() { return s_instance; };
 
+	static void updateState(State& r_newState) { getInstance().i_updateState(r_newState); }
 	static void addJob(Job job) { getInstance().i_addJob(job); }
 	static void removeJob(const Job& r_job) { getInstance().i_removeJob(r_job); }
 	static void updateJobPriority(Job& r_job, int priority) { getInstance().i_updateJobPriority(r_job, priority); }

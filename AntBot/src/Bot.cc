@@ -1,8 +1,6 @@
 #include <iostream>
+
 #include "Bot.h"
-#define LOG_STREAM std::cerr
-#define LOGGER_VERBOSE
-#include "Logger/Logger.h"
 #include "BlackBoard/BlackBoard.h"
 #include "BlackBoard/TakeEnemyAnthillStrategy.h"
 #include "BlackBoard/AttackRegionStrategy.h"
@@ -13,9 +11,9 @@
 #include "Blackboard/DiscoverAnthillPositionJob.h"
 #include "Blackboard/AttackEnemyAnthillJob.h"
 
-using namespace std;
+#include "Logger/Logger.h"
 
-static ofstream fileStream;
+using namespace std;
 
 //constructor
 Bot::Bot()
@@ -31,41 +29,60 @@ void Bot::playGame()
 	state.setup();
 	endTurn();
 
+	state.noPlayers = 6;
+
+	Blackboard::updateState(state);
 	setupStrategies();
 
-	//continues making moves while the game is not over
-	while (cin >> state)
-	{
-		state.updateVisionInformation();
-		updateJobs(); 
-		Blackboard::assignJobsToAnts(std::vector<Ant*>(Blackboard::getState().ants.size()));
-		makeMoves();
-		endTurn();
-	}
+	LOG(Logger::Trace, "Bot initialized")
+		//continues making moves while the game is not over
+		while (cin >> state)
+		{
+			LOG(Logger::Trace, Blackboard::getInstance());
+
+			LOG(Logger::Trace, "Started turn");
+
+			LOG(Logger::Trace, "Updating state");
+			Blackboard::updateState(state);
+
+			LOG(Logger::Trace, "Updating vision");
+			state.updateVisionInformation();
+
+			LOG(Logger::Trace, "Updating jobs");
+			updateJobs();
+
+			LOG(Logger::Trace, "Moving ants");
+			makeMoves();
+
+			endTurn();
+			LOG(Logger::Trace, "Turn ended");
+		}
 };
 
 void Bot::setupStrategies()
 {
-	//Add the enemy anthill related jobs
-	for (size_t antHillIndex = 0; antHillIndex < Blackboard::getInstance().getState().noPlayers - 1; antHillIndex++)
-	{
-		addExploreAnthillStrategy(antHillIndex);
-		addAttackAnthillStrategy(antHillIndex);
-	}
+	LOG(Logger::Trace, "Setting up strategies")
 
-	//Add the regions related jobs
-	for (size_t regionIndex = 0; regionIndex < Blackboard::getInstance().getAllRegions().size(); regionIndex++)
-	{
-		addAttackRegionStrategy(regionIndex);
-		addOccupyRegionStrategy(regionIndex);
-	}
-	fileStream.open("log.txt");
-#define LOG_STREAM fileStream
-	for (size_t i = 0; i < strategies.size(); i++)
-	{
-		LOG(Logger::Debug, typeid(strategies[i]).name());
-		std::cerr.flush();
-	}
+		LOG(Logger::Trace, "Add enemy anthill jobs")
+		LOG(Logger::Trace, Blackboard::getInstance().getState().noPlayers)
+
+		//Add the enemy anthill related jobs
+		for (size_t antHillIndex = 0; antHillIndex < Blackboard::getInstance().getState().noPlayers - 1; antHillIndex++)
+		{
+			LOG(Logger::Trace, "Add enemy anthill jobs - index : " + std::to_string(antHillIndex))
+				addExploreAnthillStrategy(antHillIndex);
+			addAttackAnthillStrategy(antHillIndex);
+		}
+
+	LOG(Logger::Info, "Add regions jobs")
+		//Add the regions related jobs
+		for (size_t regionIndex = 0; regionIndex < Blackboard::getInstance().getAllRegions().size(); regionIndex++)
+		{
+			addAttackRegionStrategy(regionIndex);
+			addOccupyRegionStrategy(regionIndex);
+		}
+
+	LOG(Logger::Info, "Strategies set up")
 }
 
 void Bot::addAttackRegionStrategy(const size_t& regionIndex)
@@ -120,18 +137,19 @@ void Bot::updateJobs()
 	{
 		strategies[i].computeStrategyPriority();
 		totalPriority += strategies[i].GetPriority();
+		LOG(Logger::Trace, "Strategy priority : " + std::to_string(strategies[i].GetPriority()))
 	}
 
 	//Clean the blackboard job
-	for (size_t i = Blackboard::getJobs().size() - 1; i >= 0; i--)
-	{
-		Blackboard::removeJob(Blackboard::getJobs()[i]);
-	}
+	Blackboard::getJobs() = std::vector<Job>();
+	LOG(Logger::Trace, "Jobs cleaned ");
 
 	//We assign a number of ants per priority and add jobs to BlackBoard
 	for (size_t i = 0; i < strategies.size(); i++)
 	{
+	LOG(Logger::Trace, "Assing ant to job : " + std::to_string(i));
 		strategies[i].assignMaxAnt(ceil(strategies[i].GetPriority() / totalPriority) * Blackboard::getState().myAnts.size());
+	LOG(Logger::Trace, "Setting job to BB: " + std::to_string(i));
 		strategies[i].setJobsToBlackboard();
 	}
 }

@@ -1,13 +1,15 @@
 #pragma once
 #include "Strategy.h"
 
+#include "../Logger/Logger.h"
+
 class ActiveExplorationStrategy : public Strategy 
 {
 private :
 	int targetPlayerAnthill; 
 	float turnInterestMultiplier = .1f;
 public:
-	void computeStrategyPriority()override 
+	void computeStrategyPriority() override 
 	{
 		//If we know the anthill position, this is void of interest
 		if (Blackboard::getState().enemyHills.size() >= targetPlayerAnthill - 1)
