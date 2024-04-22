@@ -52,6 +52,8 @@ public:
 			priority = (1 / enemiesInRegion) * priorityMultiplier;
 		else
 			priority = priorityMultiplier;
+
+		Strategy::ComputeStrategyPriority();
 	};
 
 	void OnAnthillDiscovered(int discoveredRedionIndex) 

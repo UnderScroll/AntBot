@@ -13,7 +13,13 @@ protected:
 public :
 	int GetPriority() { return priority; }
 
-	virtual void ComputeStrategyPriority() {};
+	virtual void ComputeStrategyPriority()
+	{
+		for (size_t i = 0; i < steps[currentJobIndex].size(); i++)
+		{
+			steps[currentJobIndex][i].priority = priority;
+		}
+	};
 
 	Strategy(std::map<int, std::vector<Job>> steps) : steps{steps}
 	{

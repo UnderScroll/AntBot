@@ -19,6 +19,8 @@ public:
 		{
 			priority = ceil(Blackboard::getState().turn * turnInterestMultiplier);
 		}
+
+		Strategy::ComputeStrategyPriority();
 	};
 	ActiveExplorationStrategy(std::map<int, std::vector<Job>> steps, int targetPlayerAnthill) : Strategy(steps), targetPlayerAnthill{ targetPlayerAnthill } {};
 };

@@ -44,6 +44,8 @@ public:
 		else
 			priority = knownTiles;
 
+		Strategy::ComputeStrategyPriority();
+
 	};
 	OccupyRegionStrategy(std::map<int, std::vector<Job>> steps, int regionIndex) : Strategy(steps), regionIndex{ regionIndex } {};
 };

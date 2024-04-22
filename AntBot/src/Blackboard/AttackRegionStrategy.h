@@ -37,9 +37,10 @@ public :
 					}
 				}
 			}
-
-			priority = (Blackboard::getState().myAnts.size() / enemiesInRegion) * knownTiles * priorityMultiplier;
 		}
+			priority = (Blackboard::getState().myAnts.size() / enemiesInRegion) * knownTiles * priorityMultiplier;
+
+			Strategy::ComputeStrategyPriority();
 	};
 
 	AttackRegionStrategy(std::map<int, std::vector<Job>> steps, int regionIndex) : Strategy(steps), regionIndex{ regionIndex } {};
