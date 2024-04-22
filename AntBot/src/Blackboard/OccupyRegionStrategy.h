@@ -47,5 +47,6 @@ public:
 		Strategy::computeStrategyPriority();
 
 	};
-	OccupyRegionStrategy(std::map<int, std::vector<Job>> steps, int regionIndex) : Strategy(steps), regionIndex{ regionIndex } {};
+
+	OccupyRegionStrategy(std::map<int, std::vector<std::shared_ptr<Job>>> steps, int regionIndex) : Strategy(steps), regionIndex{ regionIndex } {};
 };

@@ -11,17 +11,16 @@ class Strategy
 protected:
 	int currentJobIndex;
 	int priority;
-	std::map<int, std::vector<Job>> steps;
+	std::map<int, std::vector<std::shared_ptr<Job>>> steps;
 
 public :
 	int GetPriority() { return priority; }
 
 	virtual void computeStrategyPriority()
 	{
-		LOG(Logger::Trace, "Test")
 		for (size_t i = 0; i < steps[currentJobIndex].size(); i++)
 		{
-			steps[currentJobIndex][i].priority = priority;
+			steps[currentJobIndex][i]->priority = priority;
 		}
 	}
 
@@ -29,7 +28,7 @@ public :
 	{
 		for (size_t i = 0; i < steps[currentJobIndex].size(); i++)
 		{
-			steps[currentJobIndex][i].maxAssignedAnts = ceil(maxAnt / i);
+			steps[currentJobIndex][i]->maxAssignedAnts = ceil(maxAnt / i);
 		}
 	}
 
@@ -37,11 +36,11 @@ public :
 	{
 		for (size_t i = 0; i < steps[currentJobIndex].size(); i++)
 		{
-			Blackboard::addJob(steps[currentJobIndex][i]);
+			Blackboard::addJob(*steps[currentJobIndex][i]);
 		}
 	}
 
-	Strategy(std::map<int, std::vector<Job>> steps) : steps{steps}
+	Strategy(std::map<int, std::vector<std::shared_ptr<Job>>> steps) : steps{steps}
 	{
 		currentJobIndex = 0;
 		priority = 0;

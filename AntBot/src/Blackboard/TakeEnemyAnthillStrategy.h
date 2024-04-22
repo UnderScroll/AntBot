@@ -61,5 +61,5 @@ public:
 		regionIndex = discoveredRedionIndex;
 	}
 
-	TakeEnemyAnthillStrategy(std::map<int, std::vector<Job>> steps, int targetAnthill) : Strategy(steps), targetAnthill{ targetAnthill } {};
+	TakeEnemyAnthillStrategy(std::map<int, std::vector<std::shared_ptr<Job>>> steps, int targetAnthill) : Strategy(steps), targetAnthill{ targetAnthill } {};
 };

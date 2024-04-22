@@ -22,7 +22,7 @@ public:
 
 	static State& getState() { return *getInstance().p_gameState; }
 	static std::vector<Job>& getJobs() { return getInstance().jobs; }
-	static std::array<std::vector<Location>, MAX_REGION_INDEX + 1>& getAllRegions() { return getInstance().regions; }
+	static std::array<std::vector<Location>, MAX_REGION_INDEX>& getAllRegions() { return getInstance().regions; }
 	static void moveAllAnts() { getInstance().i_moveAllAnts(); }
 private:
 	/*Singleton*/
@@ -40,7 +40,7 @@ private:
 	void i_updateState(State& r_newState);
 
 	/*Region*/
-	std::array<std::vector<Location>, MAX_REGION_INDEX + 1> regions;
+	std::array<std::vector<Location>, MAX_REGION_INDEX> regions;
 
 	/*Jobs*/
 	std::vector<Job> jobs;

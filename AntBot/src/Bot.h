@@ -12,7 +12,7 @@ struct Bot
 {
     State state;
 
-    std::vector<Strategy> strategies;
+    std::vector< std::shared_ptr<Strategy>> strategies;
 
     Bot();
 

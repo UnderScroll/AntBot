@@ -87,57 +87,59 @@ void Bot::setupStrategies()
 
 void Bot::addAttackRegionStrategy(const size_t& regionIndex)
 {
-	std::vector<Job> stepJobs{ AttackZoneJob(0, 3, regionIndex) };
+	std::vector<std::shared_ptr<Job>> stepJobs{ std::make_shared<AttackZoneJob>(AttackZoneJob(0, 3, regionIndex)) };
 
-	std::map<int, std::vector<Job>> jobsMap = std::map<int, std::vector<Job>>();
+	std::map<int, std::vector<std::shared_ptr<Job>>> jobsMap = std::map<int, std::vector<std::shared_ptr<Job>>>();
 	jobsMap.insert(std::make_pair(0, stepJobs));
 
 	AttackRegionStrategy strategy = AttackRegionStrategy(jobsMap, regionIndex);
-	strategies.push_back(strategy);
+	strategies.push_back(std::make_shared<AttackRegionStrategy>(strategy));
 }
 
 void Bot::addOccupyRegionStrategy(const size_t& regionIndex)
 {
-	std::vector<Job> stepJobs{ ExploreZoneJob(0, 3, regionIndex) };
+	std::vector<std::shared_ptr<Job>> stepJobs{ std::make_shared<ExploreZoneJob>(ExploreZoneJob(0, 3, regionIndex)) };
 
-	std::map<int, std::vector<Job>> jobsMap = std::map<int, std::vector<Job>>();
+	std::map<int, std::vector<std::shared_ptr<Job>>> jobsMap = std::map<int, std::vector<std::shared_ptr<Job>>>();
 	jobsMap.insert(std::make_pair(0, stepJobs));
 
 	OccupyRegionStrategy strategy = OccupyRegionStrategy(jobsMap, regionIndex);
-	strategies.push_back(strategy);
+	strategies.push_back(std::make_shared<OccupyRegionStrategy>(strategy));
 }
 
 void Bot::addExploreAnthillStrategy(const size_t& antHillIndex)
 {
-	std::vector<Job> explorationStepJobs{ DiscoverAnthillPositionJob(0, 3, antHillIndex) };
+	std::vector<std::shared_ptr<Job>> explorationStepJobs{ std::make_shared<DiscoverAnthillPositionJob>(DiscoverAnthillPositionJob(0, 3, antHillIndex)) };
 
-	std::map<int, std::vector<Job>> explorationJobsMap = std::map<int, std::vector<Job>>();
+	std::map<int, std::vector<std::shared_ptr<Job>>> explorationJobsMap = std::map<int, std::vector<std::shared_ptr<Job>>>();
 	explorationJobsMap.insert(std::make_pair(0, explorationStepJobs));
 
 	ActiveExplorationStrategy explorationStrategy = ActiveExplorationStrategy(explorationJobsMap, antHillIndex);
-	strategies.push_back(explorationStrategy);
+	strategies.push_back(std::make_shared<ActiveExplorationStrategy>(explorationStrategy));
 }
 
 void Bot::addAttackAnthillStrategy(const size_t& antHillIndex)
 {
-	std::vector<Job> stepJobs{ AttackEnemyAnthillJob(0, 3, antHillIndex) };
+	std::vector<std::shared_ptr<Job>> stepJobs{ std::make_shared<AttackEnemyAnthillJob>(AttackEnemyAnthillJob(0, 3, antHillIndex)) };
 
-	std::map<int, std::vector<Job>> attackJobsMap = std::map<int, std::vector<Job>>();
+	std::map<int, std::vector<std::shared_ptr<Job>>> attackJobsMap = std::map<int, std::vector<std::shared_ptr<Job>>>();
 	attackJobsMap.insert(std::make_pair(0, stepJobs));
 
 	TakeEnemyAnthillStrategy attackStrategy = TakeEnemyAnthillStrategy(attackJobsMap, antHillIndex);
-	strategies.push_back(attackStrategy);
+	strategies.push_back(std::make_shared<TakeEnemyAnthillStrategy>(attackStrategy));
 }
 
 void Bot::updateJobs()
 {
 	int totalPriority = 0;
 	//We compute the strategy per priority
+	LOG(Logger::Trace, "strategies count : " + std::to_string(strategies.size()));
 	for (size_t i = 0; i < strategies.size(); i++)
 	{
-		strategies[i].computeStrategyPriority();
-		totalPriority += strategies[i].GetPriority();
-		LOG(Logger::Trace, "Strategy priority : " + std::to_string(strategies[i].GetPriority()))
+		LOG(Logger::Trace, "Strategy " + std::to_string(i)+ +" (" + typeid(*strategies[i]).name() + ") priority : " + std::to_string(strategies[i]->GetPriority()))
+		strategies[i]->computeStrategyPriority();
+		LOG(Logger::Trace, "Computed")
+		totalPriority += strategies[i]->GetPriority();
 	}
 
 	//Clean the blackboard job
@@ -148,9 +150,9 @@ void Bot::updateJobs()
 	for (size_t i = 0; i < strategies.size(); i++)
 	{
 	LOG(Logger::Trace, "Assing ant to job : " + std::to_string(i));
-		strategies[i].assignMaxAnt(ceil(strategies[i].GetPriority() / totalPriority) * Blackboard::getState().myAnts.size());
+		strategies[i]->assignMaxAnt(ceil(strategies[i]->GetPriority() / totalPriority) * Blackboard::getState().myAnts.size());
 	LOG(Logger::Trace, "Setting job to BB: " + std::to_string(i));
-		strategies[i].setJobsToBlackboard();
+		strategies[i]->setJobsToBlackboard();
 	}
 }
 
