@@ -18,7 +18,6 @@ public :
 		for (size_t i = 0; i < steps[currentJobIndex].size(); i++)
 		{
 			steps[currentJobIndex][i].priority = priority;
-			steps[currentJobIndex][i].computeMaxAssignedAnts();
 		}
 	}
 
@@ -27,6 +26,14 @@ public :
 		for (size_t i = 0; i < steps[currentJobIndex].size(); i++)
 		{
 			steps[currentJobIndex][i].maxAssignedAnts = ceil(maxAnt / i);
+		}
+	}
+
+	void setJobsToBlackboard()
+	{
+		for (size_t i = 0; i < steps[currentJobIndex].size(); i++)
+		{
+			Blackboard::addJob(steps[currentJobIndex][i]);
 		}
 	}
 

@@ -121,10 +121,17 @@ void Bot::updateJobs()
 		totalPriority += strategies[i].GetPriority();
 	}
 
-	//We assign a number of ants per priority
+	//Clean the blackboard job
+	for (size_t i = Blackboard::getJobs().size() - 1; i >= 0; i--)
+	{
+		Blackboard::removeJob(Blackboard::getJobs()[i]);
+	}
+
+	//We assign a number of ants per priority and add jobs to BlackBoard
 	for (size_t i = 0; i < strategies.size(); i++)
 	{
 		strategies[i].assignMaxAnt(ceil(strategies[i].GetPriority() / totalPriority) * Blackboard::getState().myAnts.size());
+		strategies[i].setJobsToBlackboard();
 	}
 }
 
