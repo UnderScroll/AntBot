@@ -37,7 +37,8 @@ void Bot::playGame()
 	while (cin >> state)
 	{
 		state.updateVisionInformation();
-		updateJobs();
+		updateJobs(); 
+		Blackboard::assignJobsToAnts();
 		makeMoves();
 		endTurn();
 	}
