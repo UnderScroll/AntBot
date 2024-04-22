@@ -1,5 +1,7 @@
 #include "State.h"
 
+#include <algorithm>
+
 using namespace std;
 
 //constructor
@@ -263,5 +265,30 @@ istream& operator>>(istream &is, State &state)
         }
     }
 
+    state.updateAntsVector();
+
     return is;
 };
+
+void State::updateAntsVector()
+{
+    std::vector<Ant> updatedAnts = std::vector<Ant>(ants.capacity());
+
+    for (Location& nextLocation : myAnts)
+    {
+        auto isSameAnt = [nextLocation](Ant& ant) { return ant.nextPosition.row == nextLocation.row && ant.nextPosition.col == nextLocation.col;};
+        auto antIt = std::ranges::find_if(ants.begin(), ants.end(), isSameAnt);
+        if (antIt == ants.end())
+        {
+            Ant newAnt = Ant();
+            newAnt.position = nextLocation;
+            ants.push_back(newAnt);
+        }
+        else 
+        {
+            updatedAnts.push_back(*antIt);
+        }
+    }
+
+    ants = updatedAnts;
+}
