@@ -7,7 +7,7 @@ private:
 	int regionIndex;
 
 public:
-	void ComputeStrategyPriority()override
+	void computeStrategyPriority()override
 	{
 		std::vector regionToCheck = Blackboard::getAllRegions()[regionIndex];
 		int enemiesInRegion = 0;
@@ -44,7 +44,7 @@ public:
 		else
 			priority = knownTiles;
 
-		Strategy::ComputeStrategyPriority();
+		Strategy::computeStrategyPriority();
 
 	};
 	OccupyRegionStrategy(std::map<int, std::vector<Job>> steps, int regionIndex) : Strategy(steps), regionIndex{ regionIndex } {};

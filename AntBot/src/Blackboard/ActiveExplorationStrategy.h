@@ -7,7 +7,7 @@ private :
 	int targetPlayerAnthill; 
 	float turnInterestMultiplier = .1f;
 public:
-	void ComputeStrategyPriority()override 
+	void computeStrategyPriority()override 
 	{
 		//If we know the anthill position, this is void of interest
 		if (Blackboard::getState().enemyHills.size() >= targetPlayerAnthill - 1)
@@ -20,7 +20,7 @@ public:
 			priority = ceil(Blackboard::getState().turn * turnInterestMultiplier);
 		}
 
-		Strategy::ComputeStrategyPriority();
+		Strategy::computeStrategyPriority();
 	};
 	ActiveExplorationStrategy(std::map<int, std::vector<Job>> steps, int targetPlayerAnthill) : Strategy(steps), targetPlayerAnthill{ targetPlayerAnthill } {};
 };

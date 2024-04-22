@@ -13,13 +13,22 @@ protected:
 public :
 	int GetPriority() { return priority; }
 
-	virtual void ComputeStrategyPriority()
+	virtual void computeStrategyPriority()
 	{
 		for (size_t i = 0; i < steps[currentJobIndex].size(); i++)
 		{
 			steps[currentJobIndex][i].priority = priority;
+			steps[currentJobIndex][i].computeMaxAssignedAnts();
 		}
-	};
+	}
+
+	void assignMaxAnt(int maxAnt)
+	{
+		for (size_t i = 0; i < steps[currentJobIndex].size(); i++)
+		{
+			steps[currentJobIndex][i].maxAssignedAnts = ceil(maxAnt / i);
+		}
+	}
 
 	Strategy(std::map<int, std::vector<Job>> steps) : steps{steps}
 	{

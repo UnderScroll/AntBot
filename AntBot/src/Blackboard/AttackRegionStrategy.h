@@ -7,7 +7,7 @@ private :
 	int regionIndex;
 	int priorityMultiplier = .01;
 public :
-	void ComputeStrategyPriority()override
+	void computeStrategyPriority()override
 	{
 		std::vector regionToCheck = Blackboard::getAllRegions()[regionIndex];
 		int enemiesInRegion = 0;
@@ -40,7 +40,7 @@ public :
 		}
 			priority = (Blackboard::getState().myAnts.size() / enemiesInRegion) * knownTiles * priorityMultiplier;
 
-			Strategy::ComputeStrategyPriority();
+			Strategy::computeStrategyPriority();
 	};
 
 	AttackRegionStrategy(std::map<int, std::vector<Job>> steps, int regionIndex) : Strategy(steps), regionIndex{ regionIndex } {};

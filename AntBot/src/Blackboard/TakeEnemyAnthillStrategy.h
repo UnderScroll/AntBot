@@ -9,7 +9,7 @@ private:
 	int priorityMultiplier = 10;
 
 public:
-	void ComputeStrategyPriority()override
+	void computeStrategyPriority()override
 	{
 		//if we don't know the region of the anthill
 		if (regionIndex == -1)
@@ -53,7 +53,7 @@ public:
 		else
 			priority = priorityMultiplier;
 
-		Strategy::ComputeStrategyPriority();
+		Strategy::computeStrategyPriority();
 	};
 
 	void OnAnthillDiscovered(int discoveredRedionIndex) 

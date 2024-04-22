@@ -23,6 +23,7 @@ struct Bot
     void addAttackAnthillStrategy(const size_t& antHillIndex);
     void addAttackRegionStrategy(const size_t& regionIndex);
     void addOccupyRegionStrategy(const size_t& regionIndex);
+    void updateJobs();
     void makeMoves();   //makes moves for a single turn
     void endTurn();     //indicates to the engine that it has made its moves
 };

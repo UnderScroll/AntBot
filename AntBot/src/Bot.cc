@@ -37,6 +37,7 @@ void Bot::playGame()
 	while (cin >> state)
 	{
 		state.updateVisionInformation();
+		updateJobs();
 		makeMoves();
 		endTurn();
 	}
@@ -108,6 +109,23 @@ void Bot::addAttackAnthillStrategy(const size_t& antHillIndex)
 
 	TakeEnemyAnthillStrategy attackStrategy = TakeEnemyAnthillStrategy(attackJobsMap, antHillIndex);
 	strategies.push_back(attackStrategy);
+}
+
+void Bot::updateJobs()
+{
+	int totalPriority = 0;
+	//We compute the strategy per priority
+	for (size_t i = 0; i < strategies.size(); i++)
+	{
+		strategies[i].computeStrategyPriority();
+		totalPriority += strategies[i].GetPriority();
+	}
+
+	//We assign a number of ants per priority
+	for (size_t i = 0; i < strategies.size(); i++)
+	{
+		strategies[i].assignMaxAnt(ceil(strategies[i].GetPriority() / totalPriority) * Blackboard::getState().myAnts.size());
+	}
 }
 
 //makes the bots moves for the turn
