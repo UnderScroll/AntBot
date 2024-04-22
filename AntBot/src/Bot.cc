@@ -37,6 +37,8 @@ void Bot::playGame()
 	while (cin >> state)
 	{
 		state.updateVisionInformation();
+		updateJobs(); 
+		Blackboard::assignJobsToAnts(std::vector<Ant*>(Blackboard::getState().ants.size()));
 		makeMoves();
 		endTurn();
 	}
@@ -110,6 +112,30 @@ void Bot::addAttackAnthillStrategy(const size_t& antHillIndex)
 	strategies.push_back(attackStrategy);
 }
 
+void Bot::updateJobs()
+{
+	int totalPriority = 0;
+	//We compute the strategy per priority
+	for (size_t i = 0; i < strategies.size(); i++)
+	{
+		strategies[i].computeStrategyPriority();
+		totalPriority += strategies[i].GetPriority();
+	}
+
+	//Clean the blackboard job
+	for (size_t i = Blackboard::getJobs().size() - 1; i >= 0; i--)
+	{
+		Blackboard::removeJob(Blackboard::getJobs()[i]);
+	}
+
+	//We assign a number of ants per priority and add jobs to BlackBoard
+	for (size_t i = 0; i < strategies.size(); i++)
+	{
+		strategies[i].assignMaxAnt(ceil(strategies[i].GetPriority() / totalPriority) * Blackboard::getState().myAnts.size());
+		strategies[i].setJobsToBlackboard();
+	}
+}
+
 //makes the bots moves for the turn
 void Bot::makeMoves()
 {
@@ -117,19 +143,7 @@ void Bot::makeMoves()
 	state.bug << state << endl;
 
 	//picks out moves for each ant
-	for (int ant = 0; ant < (int)state.myAnts.size(); ant++)
-	{
-		for (int d = 0; d < TDIRECTIONS; d++)
-		{
-			Location loc = state.getLocation(state.myAnts[ant], d);
-
-			if (!state.grid[loc.row][loc.col].isWater)
-			{
-				state.makeMove(state.myAnts[ant], d);
-				break;
-			}
-		}
-	}
+	Blackboard::moveAllAnts();
 
 	state.bug << "time taken: " << state.timer.getTime() << "ms" << endl << endl;
 };

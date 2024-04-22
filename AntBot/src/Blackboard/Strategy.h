@@ -1,6 +1,7 @@
 #pragma once
 #include <map>
 #include <vector>
+#include "Blackboard.h"
 #include "Job.h"
 
 class Strategy
@@ -13,7 +14,29 @@ protected:
 public :
 	int GetPriority() { return priority; }
 
-	virtual void ComputeStrategyPriority() {};
+	virtual void computeStrategyPriority()
+	{
+		for (size_t i = 0; i < steps[currentJobIndex].size(); i++)
+		{
+			steps[currentJobIndex][i].priority = priority;
+		}
+	}
+
+	void assignMaxAnt(int maxAnt)
+	{
+		for (size_t i = 0; i < steps[currentJobIndex].size(); i++)
+		{
+			steps[currentJobIndex][i].maxAssignedAnts = ceil(maxAnt / i);
+		}
+	}
+
+	void setJobsToBlackboard()
+	{
+		for (size_t i = 0; i < steps[currentJobIndex].size(); i++)
+		{
+			Blackboard::addJob(steps[currentJobIndex][i]);
+		}
+	}
 
 	Strategy(std::map<int, std::vector<Job>> steps) : steps{steps}
 	{
