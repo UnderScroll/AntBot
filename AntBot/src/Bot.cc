@@ -38,7 +38,7 @@ void Bot::playGame()
 	{
 		state.updateVisionInformation();
 		updateJobs(); 
-		Blackboard::assignJobsToAnts();
+		Blackboard::assignJobsToAnts(std::vector<Ant*>(Blackboard::getState().ants.size()));
 		makeMoves();
 		endTurn();
 	}

@@ -1,6 +1,7 @@
 #pragma once
 #include <map>
 #include <vector>
+#include "Blackboard.h"
 #include "Job.h"
 
 class Strategy
