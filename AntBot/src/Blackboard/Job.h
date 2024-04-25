@@ -14,6 +14,7 @@ protected:
 	//Target index is either the region index or anthill index, depending on the type of job
 	int targetIndex;
 public:
+	Job(): Job(0, 1, 0) {};
 	Job(const int priority = 0, const int maxAssignedAnts = 1, const int targetIndex = 0);
 	virtual bool isJobComplete() { return true; };
 	unsigned int id;

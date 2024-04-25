@@ -34,7 +34,7 @@ public :
 	{
 		for (size_t i = 0; i < steps[currentJobIndex].size(); i++)
 		{
-			Blackboard::addJob(*steps[currentJobIndex][i]);
+			Blackboard::addJob(steps[currentJobIndex][i]);
 		}
 	}
 

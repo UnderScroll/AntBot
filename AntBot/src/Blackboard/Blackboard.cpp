@@ -34,17 +34,17 @@ void Blackboard::i_updateState(State& r_state) {
 	p_gameState = &r_state;
 }
 
-void Blackboard::i_addJob(Job job)
+void Blackboard::i_addJob(std::shared_ptr<Job> job)
 {
-	auto isHigherPriority = [job](Job& r_other) { return job.priority >= r_other.priority; };
+	auto isHigherPriority = [job](std::shared_ptr<Job>& r_other) { return job->priority >= r_other->priority; };
 	auto itFirstHigherPriority = std::ranges::find_if(jobs, isHigherPriority);
 
 	jobs.insert(itFirstHigherPriority, job);
 }
 
-bool Blackboard::i_removeJob(const Job& r_job)
+bool Blackboard::i_removeJob(const std::shared_ptr<Job>& r_job)
 {
-	auto isJob = [r_job](Job& other) { return other.id == r_job.id; };
+	auto isJob = [r_job](std::shared_ptr<Job>& other) { return other->id == r_job->id; };
 	auto itJob = std::ranges::find_if(jobs, isJob);
 
 	if (itJob == jobs.end()) [[unlikely]]
@@ -54,12 +54,12 @@ bool Blackboard::i_removeJob(const Job& r_job)
 		return true;
 }
 
-bool Blackboard::i_updateJobPriority(Job& r_job, int priority)
+bool Blackboard::i_updateJobPriority(std::shared_ptr<Job>& r_job, int priority)
 {
 	if (!i_removeJob(r_job)) [[unlikely]]
 		return false;
 
-		r_job.priority = priority;
+		r_job->priority = priority;
 
 		i_addJob(r_job);
 
@@ -70,14 +70,14 @@ void Blackboard::i_assignJobsToAnts(std::vector<Ant*> ants)
 {
 	LOG(Logger::Trace, "i_assignJobsToAnts");
 
-	for (Job& job : jobs)
+	for (std::shared_ptr<Job>& job : jobs)
 	{
 		//Job candidates
 		LOG(Logger::Trace, "F0");
 		std::vector<std::pair<size_t, unsigned int>> candidates(ants.size());
 		for (size_t antIndex = 0, candidateIndex = 0; antIndex < ants.size(); antIndex++, candidateIndex++)
 		{
-			const unsigned int candidateFitness = ants[antIndex]->computeFitness(job);
+			const unsigned int candidateFitness = ants[antIndex]->computeFitness(*job);
 			candidates[candidateIndex] = std::make_pair(antIndex, candidateFitness);
 		}
 
@@ -87,14 +87,14 @@ void Blackboard::i_assignJobsToAnts(std::vector<Ant*> ants)
 		std::sort(candidates.begin(), candidates.end(), isBetterFit);
 
 		//Assign top candidates to job
-		if (job.maxAssignedAnts == 0) continue;
-		for (unsigned int i = 0; i < job.maxAssignedAnts; i++)
+		if (job->maxAssignedAnts == 0) continue;
+		for (unsigned int i = 0; i < job->maxAssignedAnts; i++)
 		{
 			LOG(Logger::Trace, &candidates[i]);
 			LOG(Logger::Trace, "F3");
 			size_t candidateIndex = candidates[i].first - i; //Offsets index by removed amount
 			LOG(Logger::Trace, "F4");
-			job.assignedAnts.push_back(ants[candidateIndex]);
+			job->assignedAnts.push_back(ants[candidateIndex]);
 			LOG(Logger::Trace, "F5");
 			ants.erase(ants.begin() + candidateIndex);
 			LOG(Logger::Trace, "F6");
@@ -120,15 +120,15 @@ void Blackboard::i_moveAllAnts() {
 
 	LOG(Logger::Trace, "F2");
 
-	for (Job& job : jobs)
+	for (std::shared_ptr<Job>& job : jobs)
 	{
-		for (Ant* ant : job.assignedAnts)
+		for (Ant* ant : job->assignedAnts)
 		{
 
 			LOG(Logger::Trace, "F3");
 			//Get path (if no path try to find a new one)
 			std::vector<Location>& path = ant->getPath();
-			Location targetLocation = job.task();
+			Location targetLocation = job->task();
 			if (path.size() == 0)
 			{
 				AStarNode& start = nextNodeMap[ant->position.col][ant->position.row];
@@ -172,8 +172,8 @@ void Blackboard::i_moveAllAnts() {
 	}
 
 	//Move ants
-	for (Job& job : jobs)
-		for (Ant* ant : job.assignedAnts)
+	for (std::shared_ptr<Job>& job : jobs)
+		for (Ant* ant : job->assignedAnts)
 		{
 			int deltax = ant->position.col - ant->nextPosition.col;
 			int deltay = ant->position.row - ant->nextPosition.row;
@@ -190,9 +190,9 @@ std::ostream& operator<<(std::ostream& r_os, const Blackboard& blackboard)
 	if (&blackboard.getState() != nullptr)
 		r_os << blackboard.getState();
 	r_os << "},\njobs: {\n[\n";
-	for (Job& job : blackboard.getJobs())
+	for (std::shared_ptr<Job>& job : blackboard.getJobs())
 	{
-		r_os << '\t' << job << '\n';
+		r_os << '\t' << *job << '\n';
 	}
 	r_os << "]\n}\n}" << std::endl;
 	return r_os;
