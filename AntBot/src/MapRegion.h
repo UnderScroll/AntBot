@@ -56,16 +56,13 @@ static const char* rawRegion =
 "EEE@@@@@MMMMM@@@@@@@WWWWWWWWWWW@@@@BBBBBBBB@@@@@RRRRR@@@@@@@TTTTTTTTTTT@@@@DDDDDDDD@@@@@OOOOO@@@@@@@VVVVVVVVVVV@@@@EEEEE"
 "EEEE@@@@@@@@@@@@@@@@@WWWWWWWWWWW@@@BBBBBBBBB@@@@@@@@@@@@@@@@@TTTTTTTTTTT@@@DDDDDDDDD@@@@@@@@@@@@@@@@@VVVVVVVVVVV@@@EEEEE";
 
+
 constexpr static std::array<std::array<char, 48>, 120> loadRegion() {
 	std::array<std::array<char, 48>, 120> region = std::array<std::array<char, 48>, 120>();
 
-	for (size_t i = 0; i < 120; i++)
-	{
-		for (size_t j = 0; j < 48; j++)
-		{
-			region[i][j] = rawRegion[i * 120 + j] - 'A';
-		}
-	}
+	for (size_t col = 0; col < 120; col++)
+		for (size_t row = 0; row < 48; row++)
+			region[col][row] = rawRegion[row * 120 + col] - 'A';
 
 	return region;
 }
@@ -76,14 +73,14 @@ constexpr static std::array<std::vector<Location>, MAX_REGION_INDEX> getRegions(
 	
 	const std::array<std::array<char, 48>, 120>& regionValues = loadRegion();
 	
-	for (size_t i = 0; i < regionValues.size(); i++)
+	for (size_t col = 0; col < regionValues.size(); col++)
 	{
-		for (size_t j = 0; j < regionValues[0].size(); j++)
+		for (size_t row = 0; row < regionValues[0].size(); row++)
 		{
-			if (regionValues[i][j] == -1)
+			if (regionValues[col][row] == -1)
 				continue;
 
-			regions[regionValues[i][j]].push_back(Location(j, i));
+			regions[regionValues[col][row]].push_back(Location(row, col));
 		}
 	}
 

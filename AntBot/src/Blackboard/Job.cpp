@@ -12,7 +12,7 @@ Job::Job(const int priority, const int maxAssignedAnts, const int targetIndex)
 
 std::ostream& operator<<(std::ostream& r_os, const Job& r_job)
 {
-	r_os << "Job(" << r_job.id << ")[" << r_job.priority << "] - (";
+	r_os << "Job(" << r_job.id << ")[priority : " << r_job.priority << ", maxAnts : " << r_job.maxAssignedAnts << "] - (";
 	for (auto itAnts = r_job.assignedAnts.begin(); itAnts < r_job.assignedAnts.end(); itAnts++)
 	{
 		r_os << (**itAnts);

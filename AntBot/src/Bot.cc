@@ -61,18 +61,15 @@ void Bot::playGame()
 
 void Bot::setupStrategies()
 {
-	LOG(Logger::Trace, "Setting up strategies")
+	LOG(Logger::Trace, "Setting up strategies");
 
-		LOG(Logger::Trace, "Add enemy anthill jobs")
-		LOG(Logger::Trace, Blackboard::getInstance().getState().noPlayers)
-
-		//Add the enemy anthill related jobs
-		for (size_t antHillIndex = 0; antHillIndex < Blackboard::getInstance().getState().noPlayers - 1; antHillIndex++)
-		{
-			LOG(Logger::Trace, "Add enemy anthill jobs - index : " + std::to_string(antHillIndex))
-				addExploreAnthillStrategy(antHillIndex);
-			addAttackAnthillStrategy(antHillIndex);
-		}
+	LOG(Logger::Trace, "Add enemy anthill jobs");
+	//Add the enemy anthill related jobs
+	for (size_t antHillIndex = 0; antHillIndex < Blackboard::getInstance().getState().noPlayers - 1; antHillIndex++)
+	{
+		addExploreAnthillStrategy(antHillIndex);
+		addAttackAnthillStrategy(antHillIndex);
+	}
 
 	LOG(Logger::Info, "Add regions jobs")
 		//Add the regions related jobs
@@ -133,27 +130,27 @@ void Bot::updateJobs()
 {
 	int totalPriority = 0;
 	//We compute the strategy per priority
-	LOG(Logger::Trace, "strategies count : " + std::to_string(strategies.size()));
+	LOG(Logger::Trace, "Computing Strategy priorities");
 	for (size_t i = 0; i < strategies.size(); i++)
 	{
-		LOG(Logger::Trace, "Strategy " + std::to_string(i)+ +" (" + typeid(*strategies[i]).name() + ") priority : " + std::to_string(strategies[i]->GetPriority()))
 		strategies[i]->computeStrategyPriority();
-		LOG(Logger::Trace, "Computed")
-		totalPriority += strategies[i]->GetPriority();
+
+		if (strategies[i]->GetPriority() > 0)
+			totalPriority += strategies[i]->GetPriority();
 	}
 
 	//Clean the blackboard job
+	LOG(Logger::Trace, "Cleaning old jobs");
 	Blackboard::getJobs() = std::vector<Job>();
-	LOG(Logger::Trace, "Jobs cleaned ");
 
 	//We assign a number of ants per priority and add jobs to BlackBoard
-	for (size_t i = 0; i < strategies.size(); i++)
-	{
-	LOG(Logger::Trace, "Assing ant to job : " + std::to_string(i));
-		strategies[i]->assignMaxAnt(ceil(strategies[i]->GetPriority() / totalPriority) * Blackboard::getState().myAnts.size());
-	LOG(Logger::Trace, "Setting job to BB: " + std::to_string(i));
-		strategies[i]->setJobsToBlackboard();
-	}
+	LOG(Logger::Trace, "Setting up jobs");
+	if (totalPriority > 0)
+		for (size_t i = 0; i < strategies.size(); i++)
+		{
+			strategies[i]->assignMaxAnt(ceil(strategies[i]->GetPriority() / (float)totalPriority * Blackboard::getState().myAnts.size()));
+			strategies[i]->setJobsToBlackboard();
+		}
 }
 
 //makes the bots moves for the turn

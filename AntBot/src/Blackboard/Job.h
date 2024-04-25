@@ -5,6 +5,7 @@
 #include "../Location.h" 
 
 #include "../Ant/Ant.h"
+#include "../Logger/Logger.h"
 
 class Job
 {
@@ -19,7 +20,10 @@ public:
 	int priority; //Higher is higher priority
 	size_t maxAssignedAnts;
 	Location taskVariable; // A task is exclusively a location to go to as it's the only thing an ant can do
-	virtual Location task() { return Location(); } // A task is exclusively a location to go to as it's the only thing an ant can do
+	virtual Location task() {
+		LOG(Logger::Trace, "Wrong task");
+		return Location(); 
+	}
 	
 	std::vector<Ant*> assignedAnts;
 };

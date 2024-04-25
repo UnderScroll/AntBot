@@ -4,11 +4,13 @@
 
 #include "../a_star.h"
 
+#include "../Logger/Logger.h"
+
 //Initialize singleton static instance
 Blackboard Blackboard::s_instance;
 
 Blackboard::Blackboard()
-	: p_gameState(nullptr) 
+	: p_gameState(nullptr)
 {
 	regions = getRegions();
 
@@ -66,9 +68,12 @@ bool Blackboard::i_updateJobPriority(Job& r_job, int priority)
 
 void Blackboard::i_assignJobsToAnts(std::vector<Ant*> ants)
 {
+	LOG(Logger::Trace, "i_assignJobsToAnts");
+
 	for (Job& job : jobs)
 	{
 		//Job candidates
+		LOG(Logger::Trace, "F0");
 		std::vector<std::pair<size_t, unsigned int>> candidates(ants.size());
 		for (size_t antIndex = 0, candidateIndex = 0; antIndex < ants.size(); antIndex++, candidateIndex++)
 		{
@@ -77,15 +82,22 @@ void Blackboard::i_assignJobsToAnts(std::vector<Ant*> ants)
 		}
 
 		//Sort candidates by fitness
+		LOG(Logger::Trace, "F1");
 		const auto isBetterFit = [](const std::pair<size_t, unsigned int>& current, const std::pair<size_t, unsigned int>& other) { return current.second > other.second; };
 		std::sort(candidates.begin(), candidates.end(), isBetterFit);
 
 		//Assign top candidates to job
+		if (job.maxAssignedAnts == 0) continue;
 		for (unsigned int i = 0; i < job.maxAssignedAnts; i++)
 		{
-			const size_t candidateIndex = candidates[i].first - i; //Offsets index by removed amount
+			LOG(Logger::Trace, &candidates[i]);
+			LOG(Logger::Trace, "F3");
+			size_t candidateIndex = candidates[i].first - i; //Offsets index by removed amount
+			LOG(Logger::Trace, "F4");
 			job.assignedAnts.push_back(ants[candidateIndex]);
+			LOG(Logger::Trace, "F5");
 			ants.erase(ants.begin() + candidateIndex);
+			LOG(Logger::Trace, "F6");
 			if (ants.size() == 0)
 				return;
 		}
@@ -94,51 +106,64 @@ void Blackboard::i_assignJobsToAnts(std::vector<Ant*> ants)
 
 void Blackboard::i_moveAllAnts() {
 	//Assign Jobs to all ants
+	LOG(Logger::Trace, "Starting moving action...");
+
 	std::vector<Ant*> ants = std::vector<Ant*>(p_gameState->ants.size());
-	std::ranges::transform(p_gameState->ants.begin(), p_gameState->ants.end(), ants.begin(), [](Ant& ant) { return &ant;});
+	std::ranges::transform(p_gameState->ants.begin(), p_gameState->ants.end(), ants.begin(), [](Ant& ant) { return &ant; });
 	i_assignJobsToAnts(ants);
+
+	LOG(Logger::Trace, "F1");
 
 	//Get next position of each assigned ants
 	Ant::resetNextMaps(mapNodes);
 	std::vector<std::vector<AStarNode>> nextNodeMap = Ant::get_nextNodeMap();
 
+	LOG(Logger::Trace, "F2");
+
 	for (Job& job : jobs)
 	{
-		for (Ant* ant : job.assignedAnts) 
+		for (Ant* ant : job.assignedAnts)
 		{
+
+			LOG(Logger::Trace, "F3");
 			//Get path (if no path try to find a new one)
 			std::vector<Location>& path = ant->getPath();
+			Location targetLocation = job.task();
 			if (path.size() == 0)
 			{
 				AStarNode& start = nextNodeMap[ant->position.col][ant->position.row];
-				AStarNode& target = nextNodeMap[job.task().col][job.task().row];
+				AStarNode& target = nextNodeMap[targetLocation.col][targetLocation.row];
+				LOG(Logger::Trace, "Target col : " + std::to_string(target.Location.col) + "Target row : " + std::to_string(target.Location.row));
 				std::vector<Location> newPath = AStar::GetPathInGrid(nextNodeMap, start, target);
 				path = newPath;
 			}
 
+			LOG(Logger::Trace, "F4");
 			//If still no path, stay idle
-			if (path.size() == 0) 
+			if (path.size() == 0)
 			{
 				//try all possible new location until one is free
 				if (!ant->setNextLocation(ant->position))
-				if (!ant->setNextLocation(Location(ant->position.row + 1, ant->position.col)))
-				if (!ant->setNextLocation(Location(ant->position.row, ant->position.col + 1)))
-				if (!ant->setNextLocation(Location(ant->position.row - 1, ant->position.col)))
-					ant->setNextLocation(Location(ant->position.row, ant->position.col - 1));
-				
+					if (!ant->setNextLocation(Location(ant->position.row + 1, ant->position.col)))
+						if (!ant->setNextLocation(Location(ant->position.row, ant->position.col + 1)))
+							if (!ant->setNextLocation(Location(ant->position.row - 1, ant->position.col)))
+								ant->setNextLocation(Location(ant->position.row, ant->position.col - 1));
+
 				break;
 			}
-			
+
+			LOG(Logger::Trace, "F5");
 			//Try to go to the next location on path
 			if (!ant->setNextLocation(path[0]))
 			{
 				AStarNode& start = nextNodeMap[ant->position.col][ant->position.row];
-				AStarNode& target = nextNodeMap[job.task().col][job.task().row];
+				AStarNode& target = nextNodeMap[targetLocation.col][targetLocation.row];
 				std::vector<Location> newPath = AStar::GetPathInGrid(nextNodeMap, start, target);
 				path = newPath;
 			}
 
-			if (path.size() != 0) 
+			LOG(Logger::Trace, "F6");
+			if (path.size() != 0)
 			{
 				ant->setNextLocation(path[0]);
 				path.erase(path.begin());

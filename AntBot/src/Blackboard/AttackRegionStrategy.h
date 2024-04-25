@@ -11,45 +11,31 @@ private:
 public:
 	void computeStrategyPriority()override
 	{
-		LOG(Logger::Trace, "getAllregions");
 		std::vector regionToCheck = Blackboard::getAllRegions()[regionIndex];
 		int enemiesInRegion = 0;
 		int knownTiles = 0;
 
-		LOG(Logger::Trace, "start first loop");
-		LOG(Logger::Trace, "Grid size : Row : " + std::to_string(Blackboard::getState().grid.size()));
-		LOG(Logger::Trace, "Grid size : Col : " + std::to_string(Blackboard::getState().grid[0].size()));
 		//Computing the amount of unseeable tiles and enemies in the region
 		for (int i = 0; i < regionToCheck.size(); i++)
 		{
 			Location locationToCheck = regionToCheck[i];
 
-			LOG(Logger::Trace, "Row : " + std::to_string(locationToCheck.row) + "Col: " + std::to_string(locationToCheck.col));
+			if (!Blackboard::getState().grid[locationToCheck.row][locationToCheck.col].isVisible) continue;
 
-			if (!Blackboard::getState().grid[locationToCheck.row][locationToCheck.col].isVisible)
+
+			knownTiles++;
+
+			for (size_t j = 0; j < Blackboard::getState().enemyAnts.size(); j++)
 			{
-				LOG(Logger::Trace, "Skipping invisible tile");
-				continue;
-			}
+				Location enemyPosition = Blackboard::getState().enemyAnts[i];
 
-			else
-			{
-				knownTiles++;
-				LOG(Logger::Trace, "Checking for enemy");
-
-				for (size_t j = 0; j < Blackboard::getState().enemyAnts.size(); j++)
+				if (enemyPosition.col == locationToCheck.col && enemyPosition.row == locationToCheck.row)
 				{
-					Location enemyPosition = Blackboard::getState().enemyAnts[i];
-
-					if (enemyPosition.col == locationToCheck.col && enemyPosition.row == locationToCheck.row)
-					{
-						enemiesInRegion++;
-					}
+					enemiesInRegion++;
 				}
 			}
 		}
 
-		LOG(Logger::Trace, "calculating priority");
 		if (enemiesInRegion != 0)
 			priority = (Blackboard::getState().myAnts.size() / enemiesInRegion) * knownTiles * priorityMultiplier;
 		else

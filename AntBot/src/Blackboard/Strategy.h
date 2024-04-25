@@ -27,9 +27,7 @@ public :
 	void assignMaxAnt(int maxAnt)
 	{
 		for (size_t i = 0; i < steps[currentJobIndex].size(); i++)
-		{
-			steps[currentJobIndex][i]->maxAssignedAnts = ceil(maxAnt / i);
-		}
+			steps[currentJobIndex][i]->maxAssignedAnts = ceil(maxAnt / steps[currentJobIndex].size());
 	}
 
 	void setJobsToBlackboard()
@@ -48,6 +46,5 @@ public :
 
 	~Strategy()
 	{
-		//TODO
 	}
 };

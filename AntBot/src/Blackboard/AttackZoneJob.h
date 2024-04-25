@@ -49,7 +49,6 @@ private :
 		//No enemy was found : picking a random position in the region
 		srand(time(NULL));
 		int randomIndex = rand() % locationsWithEnemiesInRegion.size();
-
 		return locationsWithEnemiesInRegion[randomIndex];
 	}
 public:

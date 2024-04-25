@@ -25,7 +25,6 @@ public:
 		std::vector<Location> regionToExplore = Blackboard::getAllRegions()[rand() % Blackboard::getAllRegions().size()];
 
 		Location locationsWithEnemies = regionToExplore[rand() % regionToExplore.size()];
-
-		return locationsWithEnemies;
+	return locationsWithEnemies;
 	}
 };

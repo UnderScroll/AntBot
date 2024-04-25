@@ -2,6 +2,8 @@
 
 #include <algorithm>
 
+#include "Logger/Logger.h"
+
 using namespace std;
 
 //constructor
@@ -265,24 +267,37 @@ istream& operator>>(istream &is, State &state)
         }
     }
 
+    LOG(Logger::Trace, "ants before update : ");
+    for (Ant& ant : state.ants)
+    {
+        LOG(Logger::Trace, ant);
+    }
+
     state.updateAntsVector();
+
+    LOG(Logger::Trace, "ants after update : ");
+    for (Ant& ant : state.ants)
+    {
+        LOG(Logger::Trace, ant);
+    }
 
     return is;
 };
 
 void State::updateAntsVector()
 {
-    std::vector<Ant> updatedAnts = std::vector<Ant>(ants.capacity());
+    std::vector<Ant> updatedAnts{};
+    updatedAnts.reserve(ants.capacity());
 
     for (Location& nextLocation : myAnts)
     {
         auto isSameAnt = [nextLocation](Ant& ant) { return ant.nextPosition.row == nextLocation.row && ant.nextPosition.col == nextLocation.col;};
         auto antIt = std::ranges::find_if(ants.begin(), ants.end(), isSameAnt);
-        if (antIt == ants.end())
+        if (antIt == ants.end()) [[unlikely]]
         {
             Ant newAnt = Ant();
             newAnt.position = nextLocation;
-            ants.push_back(newAnt);
+            updatedAnts.push_back(newAnt);
         }
         else 
         {

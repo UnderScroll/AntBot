@@ -4,6 +4,7 @@
 #include <algorithm>
 
 #include "Job.h"
+#include ".//Logger/Logger.h"
 
 class ExploreZoneJob : public Job {
 public:
