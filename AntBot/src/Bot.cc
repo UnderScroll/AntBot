@@ -34,29 +34,31 @@ void Bot::playGame()
 	Blackboard::updateState(state);
 	setupStrategies();
 
-	LOG(Logger::Trace, "Bot initialized")
-		//continues making moves while the game is not over
-		while (cin >> state)
-		{
-			LOG(Logger::Trace, Blackboard::getInstance());
+	LOG(Logger::Trace, "Bot initialized");
+	//continues making moves while the game is not over
+	while (cin >> state)
+	{
+		LOG(Logger::Trace, Blackboard::getInstance());
 
-			LOG(Logger::Trace, "Started turn");
+		LOG(Logger::Trace, "Started turn");
 
-			LOG(Logger::Trace, "Updating state");
-			Blackboard::updateState(state);
+		LOG(Logger::Trace, "Updating vision");
+		state.updateVisionInformation();
 
-			LOG(Logger::Trace, "Updating vision");
-			state.updateVisionInformation();
+		LOG(Logger::Trace, "Updating state");
+		Blackboard::updateState(state);
 
-			LOG(Logger::Trace, "Updating jobs");
-			updateJobs();
 
-			LOG(Logger::Trace, "Moving ants");
-			makeMoves();
+		LOG(Logger::Trace, "Updating jobs");
+		updateJobs();
 
-			endTurn();
-			LOG(Logger::Trace, "Turn ended");
-		}
+		LOG(Logger::Trace, "Moving ants");
+		makeMoves();
+		LOG(Logger::Trace, "Huh?");
+
+		endTurn();
+		LOG(Logger::Trace, "Turn ended");
+	}
 };
 
 void Bot::setupStrategies()
@@ -144,7 +146,7 @@ void Bot::updateJobs()
 	std::vector<std::shared_ptr<Job>>& r_jobs = Blackboard::getJobs();
 	for (std::shared_ptr<Job>& job : r_jobs)
 		job->assignedAnts = std::vector<Ant*>();
-	
+
 	r_jobs = std::vector<std::shared_ptr<Job>>();
 
 	//We assign a number of ants per priority and add jobs to BlackBoard
@@ -160,6 +162,7 @@ void Bot::updateJobs()
 //makes the bots moves for the turn
 void Bot::makeMoves()
 {
+
 	state.bug << "turn " << state.turn << ":" << endl;
 	state.bug << state << endl;
 

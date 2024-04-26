@@ -96,36 +96,35 @@ void Blackboard::i_assignJobsToAnts(std::vector<Ant*> ants)
 			candidates[candidateIndex] = std::make_pair(antIndex, candidateFitness);
 		}
 
-		//Sort candidates by fitness
 		LOG(Logger::Trace, "F5");
+		//Sort candidates by fitness
 		const auto isBetterFit = [](const std::pair<size_t, unsigned int>& current, const std::pair<size_t, unsigned int>& other) { return current.second > other.second; };
 		LOG(Logger::Trace, "F6");
 		std::sort(candidates.begin(), candidates.end(), isBetterFit);
-
 		//Assign top candidates to job
 		LOG(Logger::Trace, "F7");
 		if (job->maxAssignedAnts == 0) continue;
-		LOG(Logger::Trace, "F8");
 		for (unsigned int i = 0; i < job->maxAssignedAnts; i++)
 		{
-			LOG(Logger::Trace, "F9");
+			if (candidates[i].first < i)
+			{
+				continue;
+			}
 			size_t candidateIndex = candidates[i].first - i; //Offsets index by removed amount
-			LOG(Logger::Trace, "F10");
+			LOG(Logger::Trace, "Can Index" + std::to_string(candidateIndex));
+			LOG(Logger::Trace, "Ants Size" + std::to_string(ants.size()));
 			job->assignedAnts.push_back(ants[candidateIndex]);
-			LOG(Logger::Trace, "F11");
+			LOG(Logger::Trace, "F10");
 			ants.erase(ants.begin() + candidateIndex);
-			LOG(Logger::Trace, "F12");
+			LOG(Logger::Trace, "F11");
 			if (ants.size() == 0)
 			{
-				LOG(Logger::Trace, "F12.5");
+				LOG(Logger::Trace, "F12");
 				return;
 			}
-
 			LOG(Logger::Trace, "F13");
 		}
-		LOG(Logger::Trace, "F13.2");
 	}
-	LOG(Logger::Trace, "F13.3");
 }
 
 void Blackboard::i_moveAllAnts() {
@@ -134,16 +133,7 @@ void Blackboard::i_moveAllAnts() {
 
 	std::vector<Ant*> ants = std::vector<Ant*>(p_gameState->ants.size());
 	std::ranges::transform(p_gameState->ants.begin(), p_gameState->ants.end(), ants.begin(), [](Ant& ant) { return &ant; });
-	LOG(Logger::Trace, "F-1");
-	try
-	{
 	i_assignJobsToAnts(ants);
-	}
-	catch (int b)
-	{
-		LOG(Logger::Trace, "Caught Error :" + std::to_string(b));
-	}
-	LOG(Logger::Trace, "F14");
 
 	//Get next position of each assigned ants
 	Ant::resetNextMaps(mapNodes);
