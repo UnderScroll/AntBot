@@ -267,19 +267,7 @@ istream& operator>>(istream &is, State &state)
         }
     }
 
-    LOG(Logger::Trace, "ants before update : ");
-    for (Ant& ant : state.ants)
-    {
-        LOG(Logger::Trace, ant);
-    }
-
     state.updateAntsVector();
-
-    LOG(Logger::Trace, "ants after update : ");
-    for (Ant& ant : state.ants)
-    {
-        LOG(Logger::Trace, ant);
-    }
 
     return is;
 };
@@ -301,6 +289,7 @@ void State::updateAntsVector()
         }
         else 
         {
+            (*antIt).position = (*antIt).nextPosition;
             updatedAnts.push_back(*antIt);
         }
     }

@@ -12,7 +12,7 @@ class Ant
 {
 private:
 	static unsigned int s_idIndex;
-	static std::array<std::array<Ant*, 48>, 120> s_nextPositionMap;
+	static std::array<std::array<Ant*, 120>, 48> s_nextPositionMap;
 	static std::vector<std::vector<AStarNode>> s_nextNodeMap;
 
 	std::vector<Location> path;
@@ -27,7 +27,8 @@ public:
 	static std::vector<std::vector<AStarNode>>& get_nextNodeMap();
 
 	unsigned int computeFitness(const Job& job) const;
-	bool setNextLocation(Location newLocation);
+	static bool isNextLocationFree(const Location& newLocation);
+	void setNextLocation(Location newLocation);
 	std::vector<Location>& getPath();
 };
 

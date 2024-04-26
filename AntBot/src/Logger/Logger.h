@@ -2,6 +2,7 @@
 
 #include <Windows.h>
 #include <fstream>
+#include <chrono>
 
 #define LOGGER_VERBOSE
 
@@ -55,7 +56,7 @@ public:
 #ifdef NO_FATAL_LOG
 	#define FATAL_LOG(msg)
 #else
-	#define FATAL_LOG(msg) LOG_STREAM << __TIME__ << "(" << __func__ << ":" << __LINE__ << ") - ["; \
+	#define FATAL_LOG(msg) LOG_STREAM << std::chrono::system_clock::now() << " (" << __func__ << ":" << __LINE__ << ") - ["; \
 			SetConsoleTextAttribute(Logger::getInstance().hConsole, 13); \
 			LOG_STREAM << "FATAL"; \
 			SetConsoleTextAttribute(Logger::getInstance().hConsole, 15); \
@@ -64,7 +65,7 @@ public:
 #ifdef NO_ERROR_LOG
 	#define ERROR_LOG(msg)
 #else
-	#define ERROR_LOG(msg) LOG_STREAM << __TIME__ << "(" << __func__ << ":" << __LINE__ << ") - ["; \
+	#define ERROR_LOG(msg) LOG_STREAM << std::chrono::system_clock::now() << " (" << __func__ << ":" << __LINE__ << ") - ["; \
 			SetConsoleTextAttribute(Logger::getInstance().hConsole, 12); \
 			LOG_STREAM << "ERROR"; \
 			SetConsoleTextAttribute(Logger::getInstance().hConsole, 15); \
@@ -73,7 +74,7 @@ public:
 #ifdef NO_WARN_LOG
 	#define WARN_LOG(msg)
 #else
-	#define WARN_LOG(msg) LOG_STREAM << __TIME__ << "(" << __func__ << ":" << __LINE__ << ") - ["; \
+	#define WARN_LOG(msg) LOG_STREAM << std::chrono::system_clock::now() << " (" << __func__ << ":" << __LINE__ << ") - ["; \
 			SetConsoleTextAttribute(Logger::getInstance().hConsole, 14); \
 			LOG_STREAM << "WARN"; \
 			SetConsoleTextAttribute(Logger::getInstance().hConsole, 15); \
@@ -82,12 +83,12 @@ public:
 #ifdef NO_INFO_LOG
 	#define INFO_LOG(msg)
 #else
-	#define INFO_LOG(msg) LOG_STREAM << __TIME__ << "(" << __func__ << ":" << __LINE__ << ") - [INFO]  " << msg << std::endl;
+	#define INFO_LOG(msg) LOG_STREAM << std::chrono::system_clock::now() << " (" << __func__ << ":" << __LINE__ << ") - [INFO]  " << msg << std::endl;
 #endif //NO_INFO_LOG
 #ifdef NO_DEBUG_LOG
 	#define DEBUG_LOG(msg)
 #else
-	#define DEBUG_LOG(msg) LOG_STREAM << __TIME__ << "(" << __func__ << ":" << __LINE__ << ") - ["; \
+	#define DEBUG_LOG(msg) LOG_STREAM << std::chrono::system_clock::now() << " (" << __func__ << ":" << __LINE__ << ") - ["; \
 			SetConsoleTextAttribute(Logger::getInstance().hConsole, 11); \
 			LOG_STREAM << "DEBUG"; \
 			SetConsoleTextAttribute(Logger::getInstance().hConsole, 15); \
@@ -96,7 +97,7 @@ public:
 #ifdef NO_TRACE_LOG
 	#define TRACE_LOG(msg)
 #else
-	#define TRACE_LOG(msg) LOG_STREAM << __TIME__ << "(" << __func__ << ":" << __LINE__ << ") - ["; \
+	#define TRACE_LOG(msg) LOG_STREAM << std::chrono::system_clock::now() << " (" << __func__ << ":" << __LINE__ << ") - ["; \
 			SetConsoleTextAttribute(Logger::getInstance().hConsole, 7); \
 			LOG_STREAM << "TRACE"; \
 			SetConsoleTextAttribute(Logger::getInstance().hConsole, 15); \

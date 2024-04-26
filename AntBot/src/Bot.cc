@@ -141,7 +141,11 @@ void Bot::updateJobs()
 
 	//Clean the blackboard job
 	LOG(Logger::Trace, "Cleaning old jobs");
-	Blackboard::getJobs() = std::vector<std::shared_ptr<Job>>();
+	std::vector<std::shared_ptr<Job>>& r_jobs = Blackboard::getJobs();
+	for (std::shared_ptr<Job>& job : r_jobs)
+		job->assignedAnts = std::vector<Ant*>();
+	
+	r_jobs = std::vector<std::shared_ptr<Job>>();
 
 	//We assign a number of ants per priority and add jobs to BlackBoard
 	LOG(Logger::Trace, "Setting up jobs");

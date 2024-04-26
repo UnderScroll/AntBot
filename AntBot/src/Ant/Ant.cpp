@@ -3,7 +3,7 @@
 #include "../Blackboard/Job.h"
 
 unsigned int Ant::s_idIndex = 0;
-std::array<std::array<Ant*, 48>, 120> Ant::s_nextPositionMap{ nullptr };
+std::array<std::array<Ant*, 120>, 48> Ant::s_nextPositionMap{ nullptr };
 std::vector<std::vector<AStarNode>> Ant::s_nextNodeMap{};
 
 Ant::Ant()
@@ -20,25 +20,24 @@ unsigned int Ant::computeFitness(const Job& job) const
 	return INT_MAX - distSqr;
 }
 
-bool Ant::setNextLocation(Location newLocation)
+bool Ant::isNextLocationFree(const Location& newLocation)
 {
-	if (s_nextPositionMap[newLocation.row][newLocation.col] != nullptr)
-	{
-		nextPosition = position;
-		return false;
-	}
-
-
-	s_nextPositionMap[newLocation.col][newLocation.row] = this;
-	s_nextNodeMap[newLocation.col][newLocation.row].isWalkable = false;
-	nextPosition = newLocation;
-	return true;
+	return s_nextPositionMap[newLocation.row][newLocation.col] != nullptr;
 }
+
+void Ant::setNextLocation(Location newLocation)
+{
+	s_nextPositionMap[nextPosition.row][nextPosition.col] = this;
+	s_nextNodeMap[nextPosition.row][nextPosition.col].isWalkable = false;
+	nextPosition = newLocation;
+}
+
+
 
 void Ant::resetNextMaps(std::vector<std::vector<AStarNode>> nodeMap)
 {
 	Ant::s_nextNodeMap = nodeMap;
-	Ant::s_nextPositionMap = std::array<std::array<Ant*, 48>, 120>();
+	Ant::s_nextPositionMap = std::array<std::array<Ant*, 120>, 48>{ nullptr };
 }
 
 std::vector<Location>& Ant::getPath() {

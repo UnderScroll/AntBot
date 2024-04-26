@@ -1,7 +1,22 @@
+#include <string>
 #include "a_star.h"
+#include "Logger/Logger.h"
 
 std::vector<Location> AStar::GetPathInGrid(std::vector<std::vector<AStarNode>> grid, AStarNode& r_start, AStarNode& r_target)
 {
+	/*
+	LOG(Logger::Trace, "Grid :");
+	std::string output = "";
+	for (size_t i = 0; i < grid.size(); i++)
+	{
+		for (size_t j = 0; j < grid.size(); j++) 
+		{
+			output += grid[j][i].isWalkable ? "." : "@";
+		}
+		output += "\n";
+	}
+	LOG(Logger::Trace, output);
+	*/
 	// Create lists for open and closed nodes
 	std::vector<AStarNode*> openList = std::vector<AStarNode*>();
 	std::vector<AStarNode*> closedList = std::vector<AStarNode*>();
