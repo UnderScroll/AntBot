@@ -27,7 +27,7 @@ public:
 
 			for (size_t j = 0; j < Blackboard::getState().enemyAnts.size(); j++)
 			{
-				Location enemyPosition = Blackboard::getState().enemyAnts[i];
+				Location enemyPosition = Blackboard::getState().enemyAnts[j];
 
 				if (enemyPosition.col == locationToCheck.col && enemyPosition.row == locationToCheck.row)
 				{
