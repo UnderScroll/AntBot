@@ -20,10 +20,9 @@ public:
 		{
 			Location takenHill = Blackboard::getState().takenEnemyHills[i];
 			if (targetHill.col == takenHill.col && targetHill.row == takenHill.row)
-			{
 				return true;
-			}
 		}
+
 		return false;
 	}
 

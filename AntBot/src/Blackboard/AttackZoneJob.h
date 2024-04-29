@@ -16,10 +16,9 @@ private :
 			{
 				Location enemyAntLocation = Blackboard::getState().enemyAnts[i];
 				Location currentLocation = Blackboard::getAllRegions()[targetIndex][j];
+				
 				if (enemyAntLocation.col == currentLocation.col && enemyAntLocation.row == currentLocation.row)
-				{
 					locationWithEnemiesInRegion.push_back(currentLocation);
-				}
 			}
 		}
 
@@ -36,15 +35,9 @@ private :
 
 		//TODO : optimize
 		for (size_t i = 0; i < locationsWithEnemiesInRegion.size(); i++)
-		{
 			for (size_t j = 0; j < enemies.size(); j++)
-			{
 				if (enemies[j].col == locationsWithEnemiesInRegion[i].col && enemies[j].row == locationsWithEnemiesInRegion[i].row)
-				{
 					return locationsWithEnemiesInRegion[i];
-				}
-			}
-		}
 
 		//No enemy was found : picking a random position in the region
 		srand(time(NULL));
@@ -70,7 +63,6 @@ public:
 		// but this REALLY shouldn't happen, since this would mean the job is useless
 
 		Location locationsWithEnemies = getLocationInZoneWithEnemies();
-
 
 		return locationsWithEnemies;
 	}

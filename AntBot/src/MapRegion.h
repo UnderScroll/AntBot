@@ -6,7 +6,7 @@
 
 static const char MAX_REGION_INDEX = 23 + 1;
 
-static const char* rawRegion =
+static const char* s_rawRegion =
 "EEEEE@@@@@@@@@@@@@@@@@WWWWWWWWWW@@@BBBBBBBBBB@@@@@@@@@@@@@@@@@TTTTTTTTTT@@@DDDDDDDDDD@@@@@@@@@@@@@@@@@VVVVVVVVVV@@@EEEEE"
 "EEEEEE@@@@@@@KKKKK@@@@@@WWWWWWWWW@@@BBBBBBBBBB@@@@@@@HHHHH@@@@@@TTTTTTTTT@@@DDDDDDDDDD@@@@@@@JJJJJ@@@@@@VVVVVVVVV@@@EEEE"
 "EEEEEE@@@@@@KKKKKKKK@@@@@WWWWWWWW@@@BBBBBBBBBB@@@@@@HHHHHHHH@@@@@TTTTTTTT@@@DDDDDDDDDD@@@@@@JJJJJJJJ@@@@@VVVVVVVV@@@EEEE"
@@ -62,7 +62,7 @@ constexpr static std::array<std::array<char, 48>, 120> loadRegion() {
 
 	for (size_t col = 0; col < 120; col++)
 		for (size_t row = 0; row < 48; row++)
-			region[col][row] = rawRegion[row * 120 + col] - 'A';
+			region[col][row] = s_rawRegion[row * 120 + col] - 'A';
 
 	return region;
 }

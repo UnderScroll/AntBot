@@ -22,9 +22,9 @@ public:
 		//Go to a random position in a region
 		// TODO BETTER STRATEGY (hardcoded positions ?)
 		srand(time(NULL));
-		std::vector<Location> regionToExplore = Blackboard::getAllRegions()[rand() % Blackboard::getAllRegions().size()];
+		std::vector<Location>& r_regionToExplore = Blackboard::getAllRegions()[rand() % Blackboard::getAllRegions().size()];
 
-		Location locationsWithEnemies = regionToExplore[rand() % regionToExplore.size()];
-	return locationsWithEnemies;
+		Location locationsWithEnemies = r_regionToExplore[rand() % r_regionToExplore.size()];
+		return locationsWithEnemies;
 	}
 };

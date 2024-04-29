@@ -4,7 +4,13 @@
 #include <fstream>
 #include <chrono>
 
-#define LOGGER_VERBOSE
+#ifndef _DEBUG
+#define NO_TRACE_LOG
+#define NO_WARN_LOG
+#define NO_INFO_LOG
+#define NO_DEBUG_LOG
+#endif
+
 
 #ifndef LOG_STREAM
 #define LOG_STREAM Logger::getInstance().outFileStream
@@ -13,9 +19,9 @@
 class Logger {
 private:
 	static Logger& instance() {
-		static Logger instance;
+		static Logger s_instance;
 
-		return instance;
+		return s_instance;
 	}
 
 	Logger()

@@ -18,33 +18,26 @@ public:
 			return;
 		}
 
-		std::vector regionToCheck = Blackboard::getAllRegions()[regionIndex];
+		std::vector<Location> r_regionToCheck = Blackboard::getAllRegions()[regionIndex];
 		int enemiesInRegion = 0;
 		int knownTiles = 0;
 
 		//Computing the amount of seeable tiles and enemies in the region
-		for (size_t i = 0; i < regionToCheck.size(); i++)
+		for (size_t i = 0; i < r_regionToCheck.size(); i++)
 		{
-			Location locationToCheck = regionToCheck[i];
+			Location& r_locationToCheck = r_regionToCheck[i];
 
-			if (!Blackboard::getState().grid[locationToCheck.row][locationToCheck.col].isVisible)
-			{
+			if (!Blackboard::getState().grid[r_locationToCheck.row][r_locationToCheck.col].isVisible)
 				continue;
-			}
 
-			else
+			knownTiles++;
+
+			for (size_t j = 0; j < Blackboard::getState().enemyAnts.size(); j++)
 			{
-				knownTiles++;
+				Location& r_enemyPosition = Blackboard::getState().enemyAnts[i];
 
-				for (size_t j = 0; j < Blackboard::getState().enemyAnts.size(); j++)
-				{
-					Location enemyPosition = Blackboard::getState().enemyAnts[i];
-
-					if (enemyPosition.col == locationToCheck.col && enemyPosition.row == locationToCheck.row)
-					{
-						enemiesInRegion++;
-					}
-				}
+				if (r_enemyPosition.col == r_locationToCheck.col && r_enemyPosition.row == r_locationToCheck.row)
+					enemiesInRegion++;
 			}
 		}
 
@@ -56,7 +49,7 @@ public:
 		Strategy::computeStrategyPriority();
 	};
 
-	void OnAnthillDiscovered(int discoveredRedionIndex) 
+	void OnAnthillDiscovered(int discoveredRedionIndex)
 	{
 		regionIndex = discoveredRedionIndex;
 	}

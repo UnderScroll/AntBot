@@ -37,7 +37,7 @@ Blackboard::Blackboard()
 		{
 			mapNodes[row][col] = AStarNode();
 			mapNodes[row][col].isWalkable = map[row][col] != -1;
-			mapNodes[row][col].Location = Location(row, col);
+			mapNodes[row][col].location = Location(row, col);
 		}
 	}
 };
@@ -72,65 +72,50 @@ bool Blackboard::i_updateJobPriority(std::shared_ptr<Job>& r_job, int priority)
 	if (!i_removeJob(r_job)) [[unlikely]]
 		return false;
 
-		r_job->priority = priority;
+	r_job->priority = priority;
 
-		i_addJob(r_job);
+	i_addJob(r_job);
 
-		return true;
+	return true;
 }
 
 void Blackboard::i_assignJobsToAnts(std::vector<Ant*> ants)
 {
-	LOG(Logger::Trace, "F0");
 	for (std::shared_ptr<Job>& job : jobs)
 	{
 		//Job candidates
-		LOG(Logger::Trace, "F1");
-		std::vector<std::pair<size_t, unsigned int>> candidates(ants.size());
-		LOG(Logger::Trace, "F2");
+		std::vector<std::pair<size_t, unsigned int>> candidates{};
+		candidates.reserve(ants.size());
+
 		for (size_t antIndex = 0, candidateIndex = 0; antIndex < ants.size(); antIndex++, candidateIndex++)
 		{
-			LOG(Logger::Trace, "F3");
 			const unsigned int candidateFitness = ants[antIndex]->computeFitness(*job);
-			LOG(Logger::Trace, "F4");
 			candidates[candidateIndex] = std::make_pair(antIndex, candidateFitness);
 		}
 
-		LOG(Logger::Trace, "F5");
 		//Sort candidates by fitness
 		const auto isBetterFit = [](const std::pair<size_t, unsigned int>& current, const std::pair<size_t, unsigned int>& other) { return current.second > other.second; };
-		LOG(Logger::Trace, "F6");
 		std::sort(candidates.begin(), candidates.end(), isBetterFit);
+		
 		//Assign top candidates to job
-		LOG(Logger::Trace, "F7");
 		if (job->maxAssignedAnts == 0) continue;
 		for (unsigned int i = 0; i < job->maxAssignedAnts; i++)
 		{
 			if (candidates[i].first < i)
-			{
 				continue;
-			}
+
 			size_t candidateIndex = candidates[i].first - i; //Offsets index by removed amount
-			LOG(Logger::Trace, "Can Index" + std::to_string(candidateIndex));
-			LOG(Logger::Trace, "Ants Size" + std::to_string(ants.size()));
 			job->assignedAnts.push_back(ants[candidateIndex]);
-			LOG(Logger::Trace, "F10");
 			ants.erase(ants.begin() + candidateIndex);
-			LOG(Logger::Trace, "F11");
+
 			if (ants.size() == 0)
-			{
-				LOG(Logger::Trace, "F12");
 				return;
-			}
-			LOG(Logger::Trace, "F13");
 		}
 	}
 }
 
 void Blackboard::i_moveAllAnts() {
 	//Assign Jobs to all ants
-	LOG(Logger::Trace, "Starting moving action...");
-
 	std::vector<Ant*> ants = std::vector<Ant*>(p_gameState->ants.size());
 	std::ranges::transform(p_gameState->ants.begin(), p_gameState->ants.end(), ants.begin(), [](Ant& ant) { return &ant; });
 	i_assignJobsToAnts(ants);
@@ -139,19 +124,18 @@ void Blackboard::i_moveAllAnts() {
 	Ant::resetNextMaps(mapNodes);
 	std::vector<std::vector<AStarNode>> nextNodeMap = Ant::get_nextNodeMap();
 
-	for (std::shared_ptr<Job>& job : jobs)
+	for (std::shared_ptr<Job>& r_job : jobs)
 	{
-		for (Ant* ant : job->assignedAnts)
+		for (Ant* ant : r_job->assignedAnts)
 		{
 			//Get path (if no path try to find a new one)
 			std::vector<Location>& r_path = ant->getPath();
-			Location targetLocation = job->task();
+			Location targetLocation = r_job->task();
 			if (r_path.size() == 0)
 			{
-				AStarNode& start = nextNodeMap[ant->position.row][ant->position.col];
-				AStarNode& target = nextNodeMap[targetLocation.row][targetLocation.col];
-				LOG(Logger::Trace, "Target Location : " + std::to_string(target.Location.row) + ", " + std::to_string(target.Location.row));
-				std::vector<Location> newPath = AStar::GetPathInGrid(nextNodeMap, start, target);
+				AStarNode& r_start = nextNodeMap[ant->position.row][ant->position.col];
+				AStarNode& r_target = nextNodeMap[targetLocation.row][targetLocation.col];
+				std::vector<Location> newPath = AStar::getPathInGrid(nextNodeMap, r_start, r_target);
 				r_path = newPath;
 			}
 
@@ -164,6 +148,7 @@ void Blackboard::i_moveAllAnts() {
 				Location top = Location(ant->position.row + 1, ant->position.col);
 				Location left = Location(ant->position.row, ant->position.col - 1);
 				Location bottom = Location(ant->position.row - 1, ant->position.col);
+				
 				if (Ant::isNextLocationFree(self))
 					ant->setNextLocation(self);
 				else if (Ant::isNextLocationFree(right))
@@ -181,19 +166,14 @@ void Blackboard::i_moveAllAnts() {
 			//Try to go to the next location on path
 			if (Ant::isNextLocationFree(r_path[r_path.size() - 1]))
 			{
-				AStarNode& start = nextNodeMap[ant->position.row][ant->position.col];
-				AStarNode& target = nextNodeMap[targetLocation.row][targetLocation.col];
-				std::vector<Location> newPath = AStar::GetPathInGrid(nextNodeMap, start, target);
+				AStarNode& r_start = nextNodeMap[ant->position.row][ant->position.col];
+				AStarNode& r_target = nextNodeMap[targetLocation.row][targetLocation.col];
+				std::vector<Location> newPath = AStar::getPathInGrid(nextNodeMap, r_start, r_target);
 				r_path = newPath;
 			}
-			LOG(Logger::Trace, "Path:");
-			for (Location& l : r_path)
-			{
-				LOG(Logger::Trace, "\tLocation: " + std::to_string(l.col) + ", " + std::to_string(l.row));
-			}
+
 			if (r_path.size() != 0)
 			{
-				LOG(Logger::Trace, "Try to go to : " + std::to_string(r_path[r_path.size() - 1].row) + ", " + std::to_string(r_path[r_path.size() - 1].col));
 				ant->setNextLocation(r_path[r_path.size() - 1]);
 				r_path.erase(r_path.end() - 1);
 			}
@@ -201,13 +181,12 @@ void Blackboard::i_moveAllAnts() {
 	}
 
 	//Move ants
-	for (std::shared_ptr<Job>& job : jobs)
-		for (Ant* ant : job->assignedAnts)
+	for (std::shared_ptr<Job>& r_job : jobs)
+		for (Ant* ant : r_job->assignedAnts)
 		{
 			int deltax = ant->position.col - ant->nextPosition.col;
 			int deltay = ant->position.row - ant->nextPosition.row;
-			LOG(Logger::Debug, "position: (" + std::to_string(ant->position.row) + ", " + std::to_string(ant->position.col) + ")");
-			LOG(Logger::Debug, "nextPosition: (" + std::to_string(ant->nextPosition.row) + ", " + std::to_string(ant->nextPosition.col) + ")");
+
 			if (deltax != 0)
 				p_gameState->makeMove(ant->position, (deltax > 0) * 2 + 1);
 			else if (deltay != 0)
@@ -218,10 +197,8 @@ void Blackboard::i_moveAllAnts() {
 std::ostream& operator<<(std::ostream& r_os, const Blackboard& blackboard)
 {
 	r_os << "Blackboard : {\nstate: {\n";
-	/*
 	if (&blackboard.getState() != nullptr)
 		r_os << blackboard.getState();
-	*/
 	r_os << "},\nants: {\n[\n";
 	for (Ant& ant : blackboard.getState().ants)
 	{

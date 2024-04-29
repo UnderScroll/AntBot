@@ -34,7 +34,6 @@ private:
 	static Blackboard s_instance;
 	/**/
 
-
 	/*State*/
 	State* p_gameState;
 	void i_updateState(State& r_newState);

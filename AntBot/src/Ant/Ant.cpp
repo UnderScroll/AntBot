@@ -32,8 +32,6 @@ void Ant::setNextLocation(Location newLocation)
 	nextPosition = newLocation;
 }
 
-
-
 void Ant::resetNextMaps(std::vector<std::vector<AStarNode>> nodeMap)
 {
 	Ant::s_nextNodeMap = nodeMap;

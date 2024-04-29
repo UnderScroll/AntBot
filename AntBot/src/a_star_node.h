@@ -4,22 +4,22 @@
 
 struct AStarNode {
 	bool isWalkable;
-	Location Location;
-	AStarNode* ParentNode;
+	Location location;
+	AStarNode* p_parentNode;
 	int distanceToStart = INT_MAX;
 	int distanceToEnd = INT_MAX;
 	int nodeCost = INT_MAX;
 
-	void SetScore() 
+	void setScore() 
 	{
 		nodeCost = distanceToStart + distanceToEnd;
 	}
 
 	bool operator==(const AStarNode& other) const {
-		return Location.col == other.Location.col && Location.row == other.Location.row;
+		return location.col == other.location.col && location.row == other.location.row;
 	}
 
 	bool operator!=(const AStarNode& other) const {
-		return Location.col != other.Location.col || Location.row != other.Location.row;
+		return location.col != other.location.col || location.row != other.location.row;
 	}
 };

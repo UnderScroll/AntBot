@@ -5,8 +5,8 @@
 static class AStar
 {
 public:
-	static std::vector<Location> GetPathInGrid(std::vector<std::vector<AStarNode>> grid, AStarNode& r_start, AStarNode& r_target);
+	static std::vector<Location> getPathInGrid(std::vector<std::vector<AStarNode>> grid, AStarNode& r_start, AStarNode& r_target);
 private:
-	static int GetNodeDistanceSq(Location location1, Location location2, int gridRows, int gridCols);
+	static int getNodeDistanceSq(const Location& r_location1, const Location& r_location2, const int gridRows, const int gridCols);
 };
 

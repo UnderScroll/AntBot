@@ -19,9 +19,7 @@ public :
 	virtual void computeStrategyPriority()
 	{
 		for (size_t i = 0; i < steps[currentJobIndex].size(); i++)
-		{
 			steps[currentJobIndex][i]->priority = priority;
-		}
 	}
 
 	void assignMaxAnt(int maxAnt)
@@ -33,9 +31,7 @@ public :
 	void setJobsToBlackboard()
 	{
 		for (size_t i = 0; i < steps[currentJobIndex].size(); i++)
-		{
 			Blackboard::addJob(steps[currentJobIndex][i]);
-		}
 	}
 
 	Strategy(std::map<int, std::vector<std::shared_ptr<Job>>> steps) : steps{steps}

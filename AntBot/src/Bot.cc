@@ -34,54 +34,38 @@ void Bot::playGame()
 	Blackboard::updateState(state);
 	setupStrategies();
 
-	LOG(Logger::Trace, "Bot initialized");
 	//continues making moves while the game is not over
 	while (cin >> state)
 	{
-		LOG(Logger::Trace, Blackboard::getInstance());
 
-		LOG(Logger::Trace, "Started turn");
-
-		LOG(Logger::Trace, "Updating vision");
 		state.updateVisionInformation();
 
-		LOG(Logger::Trace, "Updating state");
 		Blackboard::updateState(state);
 
-
-		LOG(Logger::Trace, "Updating jobs");
 		updateJobs();
 
-		LOG(Logger::Trace, "Moving ants");
 		makeMoves();
-		LOG(Logger::Trace, "Huh?");
 
 		endTurn();
-		LOG(Logger::Trace, "Turn ended");
 	}
 };
 
 void Bot::setupStrategies()
 {
-	LOG(Logger::Trace, "Setting up strategies");
-
-	LOG(Logger::Trace, "Add enemy anthill jobs");
 	//Add the enemy anthill related jobs
-	for (size_t antHillIndex = 0; antHillIndex < Blackboard::getInstance().getState().noPlayers - 1; antHillIndex++)
+	for (size_t antHillIndex = 0; antHillIndex < Blackboard::getState().noPlayers - 1; antHillIndex++)
 	{
 		addExploreAnthillStrategy(antHillIndex);
 		addAttackAnthillStrategy(antHillIndex);
 	}
 
-	LOG(Logger::Info, "Add regions jobs")
-		//Add the regions related jobs
-		for (size_t regionIndex = 0; regionIndex < Blackboard::getInstance().getAllRegions().size(); regionIndex++)
-		{
-			addAttackRegionStrategy(regionIndex);
-			addOccupyRegionStrategy(regionIndex);
-		}
+	//Add the regions related jobs
+	for (size_t regionIndex = 0; regionIndex < Blackboard::getAllRegions().size(); regionIndex++)
+	{
+		addAttackRegionStrategy(regionIndex);
+		addOccupyRegionStrategy(regionIndex);
+	}
 
-	LOG(Logger::Info, "Strategies set up")
 }
 
 void Bot::addAttackRegionStrategy(const size_t& regionIndex)
@@ -132,7 +116,6 @@ void Bot::updateJobs()
 {
 	int totalPriority = 0;
 	//We compute the strategy per priority
-	LOG(Logger::Trace, "Computing Strategy priorities");
 	for (size_t i = 0; i < strategies.size(); i++)
 	{
 		strategies[i]->computeStrategyPriority();
@@ -142,7 +125,6 @@ void Bot::updateJobs()
 	}
 
 	//Clean the blackboard job
-	LOG(Logger::Trace, "Cleaning old jobs");
 	std::vector<std::shared_ptr<Job>>& r_jobs = Blackboard::getJobs();
 	for (std::shared_ptr<Job>& job : r_jobs)
 		job->assignedAnts = std::vector<Ant*>();
@@ -150,7 +132,6 @@ void Bot::updateJobs()
 	r_jobs = std::vector<std::shared_ptr<Job>>();
 
 	//We assign a number of ants per priority and add jobs to BlackBoard
-	LOG(Logger::Trace, "Setting up jobs");
 	if (totalPriority > 0)
 		for (size_t i = 0; i < strategies.size(); i++)
 		{

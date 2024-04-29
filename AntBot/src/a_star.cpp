@@ -2,21 +2,8 @@
 #include "a_star.h"
 #include "Logger/Logger.h"
 
-std::vector<Location> AStar::GetPathInGrid(std::vector<std::vector<AStarNode>> grid, AStarNode& r_start, AStarNode& r_target)
+std::vector<Location> AStar::getPathInGrid(std::vector<std::vector<AStarNode>> grid, AStarNode& r_start, AStarNode& r_target)
 {
-	/*
-	LOG(Logger::Trace, "Grid :");
-	std::string output = "";
-	for (size_t i = 0; i < grid.size(); i++)
-	{
-		for (size_t j = 0; j < grid.size(); j++) 
-		{
-			output += grid[j][i].isWalkable ? "." : "@";
-		}
-		output += "\n";
-	}
-	LOG(Logger::Trace, output);
-	*/
 	// Create lists for open and closed nodes
 	std::vector<AStarNode*> openList = std::vector<AStarNode*>();
 	std::vector<AStarNode*> closedList = std::vector<AStarNode*>();
@@ -26,8 +13,8 @@ std::vector<Location> AStar::GetPathInGrid(std::vector<std::vector<AStarNode>> g
 
 	// Set the initial distance and score values for the start node
 	r_start.distanceToStart = 0;
-	r_start.distanceToEnd = GetNodeDistanceSq(r_start.Location, r_target.Location, grid.size(), grid[0].size());
-	r_start.SetScore();
+	r_start.distanceToEnd = getNodeDistanceSq(r_start.location, r_target.location, grid.size(), grid[0].size());
+	r_start.setScore();
 
 	// Define the x and y coordinate changes for the neighbors
 	int dx[] = { 0, 0, -1, 1 };  // x-coordinate changes for neighbors
@@ -50,22 +37,22 @@ std::vector<Location> AStar::GetPathInGrid(std::vector<std::vector<AStarNode>> g
 		}
 
 		// Get the current node and remove it from the open list
-		AStarNode& currentNode = *openList[index];
+		AStarNode& r_currentNode = *openList[index];
 		openList.erase(openList.begin() + index);
 
 		// Add the current node to the closed list
-		closedList.push_back(&currentNode);
+		closedList.push_back(&r_currentNode);
 
 		// Check if the current node is the target node
-		if (currentNode.Location.col == r_target.Location.col && currentNode.Location.row == r_target.Location.row)
+		if (r_currentNode.location.col == r_target.location.col && r_currentNode.location.row == r_target.location.row)
 			break;
 
 		// Explore the neighbors of the current node
 		for (int i = 0; i < 4; ++i)
 		{
 			// Calculate the coordinates of the neighbor, considering grid wrapping
-			int newX = (currentNode.Location.col + dx[i] + grid[0].size()) % grid[0].size();
-			int newY = (currentNode.Location.row + dy[i] + grid.size()) % grid.size();
+			int newX = (r_currentNode.location.col + dx[i] + grid[0].size()) % grid[0].size();
+			int newY = (r_currentNode.location.row + dy[i] + grid.size()) % grid.size();
 
 			// Check if the neighbor is within the grid bounds and is walkable
 			if (grid.size() <= newY || grid[0].size() <= newX) [[unlikely]]
@@ -86,39 +73,39 @@ std::vector<Location> AStar::GetPathInGrid(std::vector<std::vector<AStarNode>> g
 				}
 
 				// Update the neighbor's distance and parent if it has a shorter path
-				if (currentNode.distanceToStart + 1 < grid[newY][newX].distanceToStart)
+				if (r_currentNode.distanceToStart + 1 < grid[newY][newX].distanceToStart)
 				{
 					if (!isInClosedList)
 					{
 						openList.push_back(&grid[newY][newX]);
 					}
 
-					grid[newY][newX].distanceToStart = currentNode.distanceToStart + 1;
-					grid[newY][newX].ParentNode = &currentNode;
-					grid[newY][newX].distanceToEnd = GetNodeDistanceSq(r_target.Location, grid[newY][newX].Location, grid.size(), grid[0].size());
-					grid[newY][newX].SetScore();
+					grid[newY][newX].distanceToStart = r_currentNode.distanceToStart + 1;
+					grid[newY][newX].p_parentNode = &r_currentNode;
+					grid[newY][newX].distanceToEnd = getNodeDistanceSq(r_target.location, grid[newY][newX].location, grid.size(), grid[0].size());
+					grid[newY][newX].setScore();
 				}
 		}
 	}
 
 	// Reconstruct the path by backtracking from the target node to the start node
 	std::vector<Location> path = std::vector<Location>();
-	AStarNode& currentNode = grid[r_target.Location.row][r_target.Location.col];
+	AStarNode& r_currentNode = grid[r_target.location.row][r_target.location.col];
 
-	while (currentNode != r_start && currentNode.ParentNode != nullptr)
+	while (r_currentNode != r_start && r_currentNode.p_parentNode != nullptr)
 	{
-		path.push_back(currentNode.Location);
-		currentNode = *currentNode.ParentNode;
+		path.push_back(r_currentNode.location);
+		r_currentNode = *r_currentNode.p_parentNode;
 	}
 
 	// Return the path from the start node to the target node
 	return path;
 }
 
-int AStar::GetNodeDistanceSq(Location location1, Location location2, int gridRows, int gridCols)
+int AStar::getNodeDistanceSq(const Location& r_location1, const Location& r_location2, const int gridRows, const int gridCols)
 {
-	int dx = std::abs(location1.col - location2.col);
-	int dy = std::abs(location1.row - location2.row);
+	int dx = std::abs(r_location1.col - r_location2.col);
+	int dy = std::abs(r_location1.row - r_location2.row);
 
 	if (dx > gridCols / 2)
 		dx = gridCols - dx;

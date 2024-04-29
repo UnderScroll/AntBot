@@ -22,26 +22,26 @@ public:
 	Location task() override
 	{
 		//Return a position with food in the zone if there is one, or a random position in the region we are trying to explore
-		std::vector<Location> locationsInRegion = Blackboard::getAllRegions()[targetIndex];
+		std::vector<Location>& r_locationsInRegion = Blackboard::getAllRegions()[targetIndex];
 
 		std::vector<Location> foods = Blackboard::getState().food;
 
 		//TODO : optimize
-		for (size_t i = 0; i < locationsInRegion.size(); i++)
+		for (size_t i = 0; i < r_locationsInRegion.size(); i++)
 		{
 			for (size_t j = 0; j < foods.size(); j++)
 			{
-				if (foods[j].col == locationsInRegion[i].col && foods[j].row == locationsInRegion[i].row)
+				if (foods[j].col == r_locationsInRegion[i].col && foods[j].row == r_locationsInRegion[i].row)
 				{
-					return locationsInRegion[i];
+					return r_locationsInRegion[i];
 				}
 			}
 		}
 
 		//No food was found : picking a random position in the region
 		srand(time(NULL));
-		int randomIndex = rand() % locationsInRegion.size();
+		int randomIndex = rand() % r_locationsInRegion.size();
 
-		return locationsInRegion[randomIndex];
+		return r_locationsInRegion[randomIndex];
 	}
 };
